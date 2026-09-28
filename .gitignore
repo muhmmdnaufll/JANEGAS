@@ -1,0 +1,26 @@
+# Environments & Dependencies
+**/node_modules/
+**/.venv/
+**/venv/
+**/env/
+
+# Python Cache
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# Build Outputs
+**/dist/
+**/build/
+
+# Local databases
+**/*.sqlite3
+# preserve initial seed if needed, but ignore runtime locks
+**/*.db-journal
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
