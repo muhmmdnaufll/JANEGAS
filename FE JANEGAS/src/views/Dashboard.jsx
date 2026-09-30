@@ -6,7 +6,7 @@ import {
 } from "recharts";
 import { 
   Layers, Flame, Sprout, Users, Building2, Home, 
-  Activity, Clock, ShieldAlert, Sparkles, RefreshCw
+  Activity, Clock, ShieldAlert, Leaf, RefreshCw
 } from "lucide-react";
 
 const KPICard = ({ icon: Icon, label, value, unit, color = "#3a7d40", sub }) => (
@@ -124,7 +124,7 @@ export default function Dashboard() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       {/* KPI Cards Grid */}
-      <div className="kpi-grid" id="dashboard-kpi-grid">
+      <div className="kpi-grid">
         <KPICard
           icon={Layers}
           label="Total Limbah Terkumpul"
@@ -176,7 +176,7 @@ export default function Dashboard() {
       </div>
 
       {/* Environmental & Economic Impact Banner */}
-      <div className="card" id="dashboard-impact-card" style={{ 
+      <div className="card" style={{ 
         background: "linear-gradient(135deg, #132a16 0%, #1a3d1e 50%, #245228 100%)",
         color: "#ffffff",
         border: "none",
@@ -193,7 +193,7 @@ export default function Dashboard() {
               alignItems: "center",
               justifyContent: "center"
             }}>
-              <Sparkles size={24} color="#72c478" />
+              <Leaf size={24} color="#72c478" />
             </div>
             <div>
               <div style={{ fontSize: 16, fontWeight: 700, color: "#d4edd5" }}>
@@ -230,7 +230,7 @@ export default function Dashboard() {
       {/* Charts Section */}
       <div className="grid-2">
         {/* Chart 1: Biogas Production & Feedstock Input */}
-        <div className="card" id="dashboard-trend-chart">
+        <div className="card">
           <div className="card-header">
             <div>
               <h3 className="card-title">Tren Produksi Biogas & Input Kotoran</h3>
@@ -269,7 +269,7 @@ export default function Dashboard() {
         </div>
 
         {/* Chart 2: Households Served */}
-        <div className="card" id="dashboard-distribution-chart">
+        <div className="card">
           <div className="card-header">
             <div>
               <h3 className="card-title">Penyaluran Energi ke Rumah Tangga (KK)</h3>
@@ -300,7 +300,7 @@ export default function Dashboard() {
       </div>
 
       {/* Activity Timeline Feed */}
-      <div className="card" id="dashboard-recent-activity">
+      <div className="card">
         <div className="card-header">
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Activity size={18} color="var(--color-forest-600)" />
