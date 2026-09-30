@@ -55,7 +55,7 @@ export const startJANEGASTour = (role = "admin") => {
     steps.push({
       element: ".sidebar-footer",
       popover: {
-        title: "👤 Profil Pengguna & Peran Akses",
+        title: "Profil Pengguna & Peran Akses",
         description: `
           <div style="font-size: 13px; line-height: 1.6; color: #2d3748;">
             Menampilkan username dan peran aktif Anda (<b>${role.toUpperCase()}</b>). Hak akses form dan tombol input disesuaikan otomatis dengan peran pengguna (Admin, Operator KPS, Peternak Mitra, atau Kelompok Tani).
