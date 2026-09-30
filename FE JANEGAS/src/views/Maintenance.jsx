@@ -3,7 +3,7 @@ import { maintenanceService } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { 
   Wrench, Plus, Edit2, Trash2, X, AlertTriangle, 
-  CheckCircle2, Clock, DollarSign, PenTool, User
+  CheckCircle2, Clock, DollarSign
 } from "lucide-react";
 
 const LOG_TYPES = {

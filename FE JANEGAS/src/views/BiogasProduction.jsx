@@ -2,8 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { biogasService } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { 
-  Flame, Plus, Search, Edit2, Trash2, X, Activity,
-  Gauge, Home, AlertTriangle, CheckCircle2
+  Flame, Plus, Search, Edit2, Trash2, X, Activity, Home
 } from "lucide-react";
 
 const STATUS_MAP = {

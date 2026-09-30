@@ -3,7 +3,7 @@ import { memberService } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { 
   Users, Plus, Search, Edit2, Trash2, X, 
-  MapPin, Phone, CheckCircle2, XCircle, Building2, User
+  MapPin, CheckCircle2, XCircle, Building2, User
 } from "lucide-react";
 
 export default function Members() {

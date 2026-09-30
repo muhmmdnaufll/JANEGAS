@@ -3,5 +3,5 @@ uvicorn[standard]
 sqlalchemy
 pydantic
 pydantic-settings
-passlib[bcrypt]
+bcrypt
 python-multipart

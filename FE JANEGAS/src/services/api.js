@@ -1,4 +1,4 @@
-﻿import axios from "axios";
+import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
 const api = axios.create({ baseURL: BASE_URL });
@@ -9,30 +9,48 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+const parseLimit = (param, defaultLimit = 200) => {
+  if (typeof param === "object" && param !== null) {
+    return param.limit ?? defaultLimit;
+  }
+  return typeof param === "number" || typeof param === "string" ? param : defaultLimit;
+};
+
+const parseMemberType = (param) => {
+  if (typeof param === "object" && param !== null) {
+    return param.member_type || "";
+  }
+  return typeof param === "string" ? param : "";
+};
+
 export const authService = {
   login: (username, password) => api.post("/auth/login", { username, password }),
+  getCurrentUser: () => api.get("/auth/users/me"),
 };
 export const dashboardService = { getSummary: () => api.get("/dashboard/summary") };
 export const manureService = {
-  getAll: (limit = 200) => api.get(`/manure/?limit=${limit}`),
+  getAll: (param = 200) => api.get(`/manure/?limit=${parseLimit(param, 200)}`),
   create: (data) => api.post("/manure/", data),
   update: (id, data) => api.put(`/manure/${id}`, data),
   remove: (id) => api.delete(`/manure/${id}`),
 };
 export const biogasService = {
-  getAll: (limit = 200) => api.get(`/biogas/?limit=${limit}`),
+  getAll: (param = 200) => api.get(`/biogas/?limit=${parseLimit(param, 200)}`),
   create: (data) => api.post("/biogas/", data),
   update: (id, data) => api.put(`/biogas/${id}`, data),
   remove: (id) => api.delete(`/biogas/${id}`),
 };
 export const fertilizerService = {
-  getAll: (limit = 200) => api.get(`/fertilizer/?limit=${limit}`),
+  getAll: (param = 200) => api.get(`/fertilizer/?limit=${parseLimit(param, 200)}`),
   create: (data) => api.post("/fertilizer/", data),
   update: (id, data) => api.put(`/fertilizer/${id}`, data),
   remove: (id) => api.delete(`/fertilizer/${id}`),
 };
 export const memberService = {
-  getAll: (member_type) => api.get(`/members/${member_type ? "?member_type=" + member_type : ""}`),
+  getAll: (param) => {
+    const type = parseMemberType(param);
+    return api.get(`/members/${type ? "?member_type=" + encodeURIComponent(type) : ""}`);
+  },
   create: (data) => api.post("/members/", data),
   update: (id, data) => api.put(`/members/${id}`, data),
   remove: (id) => api.delete(`/members/${id}`),

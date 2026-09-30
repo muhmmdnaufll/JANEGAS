@@ -6,8 +6,7 @@ import {
 } from "recharts";
 import { 
   Layers, Flame, Sprout, Users, Building2, Home, 
-  ArrowUpRight, Activity, TrendingUp, CheckCircle2,
-  Clock, ShieldAlert, Sparkles, RefreshCw
+  Activity, Clock, ShieldAlert, Sparkles, RefreshCw
 } from "lucide-react";
 
 const KPICard = ({ icon: Icon, label, value, unit, color = "#3a7d40", sub }) => (

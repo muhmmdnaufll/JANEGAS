@@ -27,6 +27,8 @@ class LoginResponse(BaseModel):
     token_type: str = "bearer"
     role: str
     username: str
+    user_id: Optional[int] = None
+    member_id: Optional[int] = None
 
 
 # --- MEMBER ------------------------------------------------------------------
@@ -38,14 +40,21 @@ class MemberCreate(BaseModel):
     member_type: str  # peternak | kelompok_tani
     livestock_type: Optional[str] = None
     livestock_count: Optional[int] = None
+    village: Optional[str] = "Kota Jantho"
+    capacity_info: Optional[str] = None
+    is_active: Optional[bool] = True
 
 class MemberUpdate(BaseModel):
     name: Optional[str] = None
     contact_person: Optional[str] = None
     phone: Optional[str] = None
     address: Optional[str] = None
+    member_type: Optional[str] = None
     livestock_type: Optional[str] = None
     livestock_count: Optional[int] = None
+    village: Optional[str] = None
+    capacity_info: Optional[str] = None
+    is_active: Optional[bool] = None
 
 class MemberResponse(BaseModel):
     id: int
@@ -56,6 +65,9 @@ class MemberResponse(BaseModel):
     member_type: str
     livestock_type: Optional[str]
     livestock_count: Optional[int]
+    village: Optional[str] = "Kota Jantho"
+    capacity_info: Optional[str] = None
+    is_active: bool = True
     registered_at: datetime
     class Config:
         from_attributes = True
@@ -67,13 +79,15 @@ class ManureSupplyCreate(BaseModel):
     supply_date: date
     livestock_type: str
     volume_kg: float = Field(gt=0)
-    water_ratio: float = 1.0
+    moisture_content: Optional[float] = 75.0
+    water_ratio: Optional[float] = 1.0
     notes: Optional[str] = None
 
 class ManureSupplyUpdate(BaseModel):
     supply_date: Optional[date] = None
     livestock_type: Optional[str] = None
     volume_kg: Optional[float] = None
+    moisture_content: Optional[float] = None
     water_ratio: Optional[float] = None
     notes: Optional[str] = None
 
@@ -83,6 +97,7 @@ class ManureSupplyResponse(BaseModel):
     supply_date: date
     livestock_type: str
     volume_kg: float
+    moisture_content: Optional[float] = 75.0
     water_ratio: float
     notes: Optional[str]
     recorded_at: datetime
@@ -96,6 +111,8 @@ class BiogasProductionCreate(BaseModel):
     production_date: date
     input_volume_kg: float = Field(gt=0)
     biogas_volume_m3: float = Field(gt=0)
+    gas_pressure_bar: Optional[float] = 1.2
+    ph_level: Optional[float] = 7.2
     households_served: int = 0
     digester_status: str = "normal"
     temperature_celsius: Optional[float] = None
@@ -105,6 +122,8 @@ class BiogasProductionUpdate(BaseModel):
     production_date: Optional[date] = None
     input_volume_kg: Optional[float] = None
     biogas_volume_m3: Optional[float] = None
+    gas_pressure_bar: Optional[float] = None
+    ph_level: Optional[float] = None
     households_served: Optional[int] = None
     digester_status: Optional[str] = None
     temperature_celsius: Optional[float] = None
@@ -115,6 +134,8 @@ class BiogasProductionResponse(BaseModel):
     production_date: date
     input_volume_kg: float
     biogas_volume_m3: float
+    gas_pressure_bar: Optional[float] = 1.2
+    ph_level: Optional[float] = 7.2
     households_served: int
     digester_status: str
     temperature_celsius: Optional[float]

@@ -46,6 +46,9 @@ def seed_database(db: Session):
             contact_person="Baihaqi",
             phone="08123456789",
             address="Desa Jantho, Kec. Jantho, Aceh Besar",
+            village="Desa Jantho",
+            capacity_info="8 Ekor Sapi",
+            is_active=True,
             member_type="peternak",
             livestock_type="sapi",
             livestock_count=8
@@ -55,6 +58,9 @@ def seed_database(db: Session):
             contact_person="Ramli",
             phone="08234567890",
             address="Desa Jantho Baru, Kec. Jantho, Aceh Besar",
+            village="Desa Jantho Baru",
+            capacity_info="5 Ekor Sapi",
+            is_active=True,
             member_type="peternak",
             livestock_type="sapi",
             livestock_count=5
@@ -64,6 +70,9 @@ def seed_database(db: Session):
             contact_person="Sulaiman",
             phone="08345678901",
             address="Desa Buengcala, Kec. Jantho, Aceh Besar",
+            village="Desa Buengcala",
+            capacity_info="15 Ekor Kambing",
+            is_active=True,
             member_type="peternak",
             livestock_type="kambing",
             livestock_count=15
@@ -73,6 +82,9 @@ def seed_database(db: Session):
             contact_person="Marzuki",
             phone="08456789012",
             address="Desa Jantho Makmur, Kec. Jantho, Aceh Besar",
+            village="Desa Jantho Makmur",
+            capacity_info="10 Ekor Campuran",
+            is_active=True,
             member_type="peternak",
             livestock_type="campuran",
             livestock_count=10
@@ -88,6 +100,9 @@ def seed_database(db: Session):
             contact_person="Pak Hasbi",
             phone="08567890123",
             address="Desa Jantho, Kec. Jantho, Aceh Besar",
+            village="Desa Jantho",
+            capacity_info="Lahan Sawah 4 Ha",
+            is_active=True,
             member_type="kelompok_tani",
             livestock_type=None,
             livestock_count=None
@@ -97,6 +112,9 @@ def seed_database(db: Session):
             contact_person="Pak Zulkarnaen",
             phone="08678901234",
             address="Desa Buengcala, Kec. Jantho, Aceh Besar",
+            village="Desa Buengcala",
+            capacity_info="Lahan Palawija 3.5 Ha",
+            is_active=True,
             member_type="kelompok_tani",
             livestock_type=None,
             livestock_count=None
@@ -130,6 +148,7 @@ def seed_database(db: Session):
                 supply_date=supply_date,
                 livestock_type=ltype,
                 volume_kg=volume,
+                moisture_content=round(random.uniform(70.0, 82.0), 1),
                 water_ratio=1.0,
                 notes=None
             ))
@@ -148,6 +167,8 @@ def seed_database(db: Session):
             production_date=prod_date,
             input_volume_kg=input_vol,
             biogas_volume_m3=biogas_vol,
+            gas_pressure_bar=round(random.uniform(1.10, 1.45), 2),
+            ph_level=round(random.uniform(6.8, 7.4), 1),
             households_served=hh,
             digester_status=status,
             temperature_celsius=round(random.uniform(28.0, 35.0), 1),

@@ -2,8 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { manureService, memberService } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { 
-  Layers, Plus, Search, Edit2, Trash2, X, RefreshCw,
-  Scale, Filter, Calendar, FileText, CheckCircle2
+  Layers, Plus, Search, Edit2, Trash2, X, Scale
 } from "lucide-react";
 
 const LIVESTOCK_LABELS = {
@@ -59,9 +58,12 @@ export default function ManureSupply() {
 
   const openNewModal = () => {
     setEditingItem(null);
+    const defaultSupplierId = (user?.role === "peternak" && user?.member_id)
+      ? user.member_id
+      : (members[0]?.id || "");
     setForm({
       supply_date: new Date().toISOString().slice(0, 10),
-      supplier_id: members[0]?.id || "",
+      supplier_id: defaultSupplierId,
       livestock_type: "sapi",
       volume_kg: "",
       moisture_content: "75",

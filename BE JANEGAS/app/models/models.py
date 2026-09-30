@@ -33,6 +33,9 @@ class Member(Base):
     member_type = Column(String, nullable=False)
     livestock_type = Column(String, nullable=True)
     livestock_count = Column(Integer, nullable=True)
+    village = Column(String, default="Kota Jantho")
+    capacity_info = Column(String, nullable=True)
+    is_active = Column(Boolean, default=True)
     registered_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="member")
@@ -49,6 +52,7 @@ class ManureSupply(Base):
     supply_date = Column(Date, nullable=False)
     livestock_type = Column(String, nullable=False)  # sapi, kambing, campuran
     volume_kg = Column(Float, nullable=False)
+    moisture_content = Column(Float, default=75.0)
     water_ratio = Column(Float, default=1.0)
     notes = Column(Text, nullable=True)
     recorded_at = Column(DateTime, default=datetime.utcnow)
@@ -64,6 +68,8 @@ class BiogasProduction(Base):
     production_date = Column(Date, nullable=False)
     input_volume_kg = Column(Float, nullable=False)
     biogas_volume_m3 = Column(Float, nullable=False)
+    gas_pressure_bar = Column(Float, default=1.2)
+    ph_level = Column(Float, default=7.2)
     households_served = Column(Integer, default=0)
     digester_status = Column(String, default="normal")  # normal, gangguan_ringan, gangguan_berat
     temperature_celsius = Column(Float, nullable=True)

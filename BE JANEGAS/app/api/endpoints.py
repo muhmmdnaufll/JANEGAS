@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.core.database import get_db
@@ -17,15 +17,36 @@ def login(login_req: schemas.LoginRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Username atau password salah")
     if not user.is_active:
         raise HTTPException(status_code=403, detail="Akun tidak aktif")
+    member = db.query(models.Member).filter(models.Member.user_id == user.id).first()
     token = f"janegas_token_{user.id}_{user.role}"
-    return schemas.LoginResponse(access_token=token, role=user.role, username=user.username)
+    return schemas.LoginResponse(
+        access_token=token,
+        role=user.role,
+        username=user.username,
+        user_id=user.id,
+        member_id=member.id if member else None
+    )
 
 @router.get("/auth/users/me", response_model=schemas.UserResponse, tags=["Auth"])
-def get_current_user_info(token: str, db: Session = Depends(get_db)):
-    parts = token.split("_")
+def get_current_user_info(
+    token: Optional[str] = None,
+    authorization: Optional[str] = Header(None),
+    db: Session = Depends(get_db)
+):
+    raw_token = token
+    if not raw_token and authorization:
+        raw_token = authorization.replace("Bearer ", "").strip()
+    if not raw_token:
+        raise HTTPException(status_code=401, detail="Token tidak ditemukan")
+
+    parts = raw_token.split("_")
     if len(parts) < 4:
         raise HTTPException(status_code=401, detail="Token tidak valid")
-    user_id = int(parts[3])
+    try:
+        user_id = int(parts[2])  # Format: janegas_token_{user.id}_{user.role}
+    except (ValueError, IndexError):
+        raise HTTPException(status_code=401, detail="Token tidak valid")
+
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User tidak ditemukan")
@@ -172,9 +193,17 @@ def get_dashboard_summary(db: Session = Depends(get_db)):
         BiogasProduction.production_date >= thirty_days_ago
     ).order_by(BiogasProduction.production_date.asc()).all()
 
-    recent_manure = db.query(ManureSupply).filter(
+    # Aggregated 30 days of manure supply for trend chart
+    recent_manure = db.query(
+        ManureSupply.supply_date,
+        func.sum(ManureSupply.volume_kg).label("volume_kg")
+    ).filter(
         ManureSupply.supply_date >= thirty_days_ago
-    ).order_by(ManureSupply.supply_date.asc()).all()
+    ).group_by(
+        ManureSupply.supply_date
+    ).order_by(
+        ManureSupply.supply_date.asc()
+    ).all()
 
     # Recent activity log (latest 10)
     recent_supply_log = db.query(ManureSupply).order_by(ManureSupply.recorded_at.desc()).limit(5).all()
@@ -208,7 +237,7 @@ def get_dashboard_summary(db: Session = Depends(get_db)):
         "trend_manure": [
             {
                 "date": str(s.supply_date),
-                "volume_kg": s.volume_kg,
+                "volume_kg": round(float(s.volume_kg), 1),
             } for s in recent_manure
         ],
         "recent_supply_log": [

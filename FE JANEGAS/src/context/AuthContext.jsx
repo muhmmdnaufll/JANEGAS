@@ -1,4 +1,4 @@
-﻿import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { authService } from "../services/api";
 
 const AuthContext = createContext(null);
@@ -15,8 +15,8 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     const res = await authService.login(username, password);
-    const { access_token, role, username: uname } = res.data;
-    const userData = { token: access_token, role, username: uname };
+    const { access_token, role, username: uname, user_id, member_id } = res.data;
+    const userData = { token: access_token, role, username: uname, user_id, member_id };
     localStorage.setItem("janegas_token", access_token);
     localStorage.setItem("janegas_user", JSON.stringify(userData));
     setUser(userData);

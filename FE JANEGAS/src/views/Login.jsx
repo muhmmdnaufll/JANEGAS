@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Flame, ArrowRight, ShieldCheck, UserCheck, AlertCircle } from "lucide-react";
+import { Flame, ArrowRight, AlertCircle } from "lucide-react";
 
 const DEMO_ACCOUNTS = [
   { label: "Admin KPS", username: "admin", password: "admin123", role: "admin", desc: "Akses Penuh Semua Modul", color: "#52a659" },

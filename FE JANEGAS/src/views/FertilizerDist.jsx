@@ -3,7 +3,7 @@ import { fertilizerService, memberService } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { 
   Sprout, Plus, Search, Edit2, Trash2, X, 
-  Droplets, Package, Building2, Calendar, CheckCircle2
+  Droplets, Package, Building2
 } from "lucide-react";
 
 const FERT_TYPES = {
@@ -58,9 +58,12 @@ export default function FertilizerDist() {
 
   const openNewModal = () => {
     setEditingItem(null);
+    const defaultRecipientId = (user?.role === "tani" && user?.member_id)
+      ? user.member_id
+      : (members[0]?.id || "");
     setForm({
       distribution_date: new Date().toISOString().slice(0, 10),
-      recipient_id: members[0]?.id || "",
+      recipient_id: defaultRecipientId,
       fertilizer_type: "cair",
       quantity: "",
       unit: "liter",
