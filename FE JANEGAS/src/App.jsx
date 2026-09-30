@@ -16,8 +16,10 @@ import {
   Users, 
   Wrench, 
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Compass
 } from "lucide-react";
+import { startJANEGASTour } from "./utils/tourGuide";
 import "./index.css";
 
 const NAV_ITEMS = [
@@ -167,7 +169,31 @@ function Layout() {
               </p>
             )}
           </div>
-          <div className="topbar-meta">
+          <div className="topbar-meta" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <button
+              id="btn-start-tour"
+              onClick={() => startJANEGASTour(user?.role)}
+              className="btn btn-secondary btn-sm"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "5px 12px",
+                borderRadius: 20,
+                fontSize: 12,
+                fontWeight: 600,
+                cursor: "pointer",
+                border: "1px solid var(--border-default)",
+                background: "#ffffff",
+                color: "var(--color-forest-800)",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.05)"
+              }}
+              title="Mulai Panduan Penggunaan Sistem (Driver.js)"
+            >
+              <Compass size={15} color="var(--color-forest-600)" />
+              <span>Panduan Sistem</span>
+            </button>
+
             <span style={{ 
               display: "inline-flex", 
               alignItems: "center", 
