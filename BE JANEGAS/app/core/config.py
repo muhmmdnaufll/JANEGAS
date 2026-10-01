@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "janegas-secret-key-community-biogas-energy-transition"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 1 week
     
+    # Gemini AI Configuration
+    GEMINI_API_KEY: Optional[str] = None
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=True,

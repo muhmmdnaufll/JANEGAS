@@ -145,6 +145,14 @@ class BiogasProductionResponse(BaseModel):
         from_attributes = True
 
 
+# --- AI / FORECAST -----------------------------------------------------------
+class AIChatRequest(BaseModel):
+    message: str
+
+class AIChatResponse(BaseModel):
+    response: str
+
+
 # --- FERTILIZER DISTRIBUTION -------------------------------------------------
 class FertilizerDistributionCreate(BaseModel):
     recipient_id: int
