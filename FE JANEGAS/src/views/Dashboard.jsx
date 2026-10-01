@@ -6,7 +6,8 @@ import {
 } from "recharts";
 import { 
   Layers, Flame, Sprout, Users, Building2, Home, 
-  Activity, Clock, ShieldAlert, Leaf, RefreshCw
+  Activity, Clock, ShieldAlert, Leaf, RefreshCw,
+  Sparkles, TrendingUp, CheckCircle2, AlertTriangle
 } from "lucide-react";
 
 const KPICard = ({ icon: Icon, label, value, unit, color = "#3a7d40", sub }) => (
@@ -43,6 +44,233 @@ const CustomTooltip = ({ active, payload, label }) => {
           <b>{typeof p.value === "number" ? p.value.toLocaleString("id-ID") : p.value}</b>
         </div>
       ))}
+    </div>
+  );
+};
+
+const AIAdvisorCard = ({ forecast }) => {
+  if (!forecast) return null;
+
+  const isHealthy = forecast.is_healthy;
+  const ph = forecast.latest_ph || 7.2;
+  const press = forecast.latest_pressure || 1.2;
+  const projBiogas = forecast.projected_7d_biogas_m3 || 0;
+  const projHH = forecast.projected_hh_capacity || 0;
+  const projManure = forecast.projected_7d_manure_kg || 0;
+  const projWater = forecast.recommended_daily_water_liters || 0;
+  const projSlurry = forecast.projected_7d_liquid_slurry_liters || 0;
+  const projLpg = forecast.projected_lpg_cylinders || 0;
+  const projSavings = forecast.projected_economic_savings_idr || 0;
+
+  const handleOpenAi = (query) => {
+    window.dispatchEvent(new CustomEvent("open-janegas-ai", { detail: query }));
+  };
+
+  const quickQuestions = [
+    "Prediksi biogas 7 hari ke depan?",
+    "Status pH & tekanan digester?",
+    "Neraca kotoran ternak & rasio air?",
+    "Kesiapan pupuk bio-slurry?"
+  ];
+
+  return (
+    <div
+      style={{
+        background: "linear-gradient(135deg, #ffffff 0%, #f4fbf4 100%)",
+        border: "1.5px solid var(--border-default)",
+        borderRadius: "var(--radius-lg)",
+        padding: "20px 24px",
+        boxShadow: "0 4px 20px rgba(13, 31, 15, 0.06)",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Decorative background glow */}
+      <div
+        style={{
+          position: "absolute",
+          top: -30,
+          right: -30,
+          width: 140,
+          height: 140,
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(94, 234, 212, 0.25) 0%, rgba(20, 184, 179, 0) 70%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Top Banner Row */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 12,
+          borderBottom: "1px solid var(--border-default)",
+          paddingBottom: 14,
+          marginBottom: 16,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: 10,
+              background: "linear-gradient(135deg, #1a3d1e 0%, #14b8b3 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 2px 8px rgba(20, 184, 179, 0.3)",
+            }}
+          >
+            <Sparkles size={20} color="#ffffff" />
+          </div>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <h3 style={{ fontSize: 16, fontWeight: 700, margin: 0, color: "var(--color-forest-900)" }}>
+                AI Bio-Energy Advisor & Proyeksi 7 Hari
+              </h3>
+              <span
+                style={{
+                  background: isHealthy ? "rgba(34, 197, 94, 0.12)" : "rgba(245, 158, 11, 0.12)",
+                  color: isHealthy ? "#16a34a" : "#d97706",
+                  border: isHealthy ? "1px solid rgba(34, 197, 94, 0.3)" : "1px solid rgba(245, 158, 11, 0.3)",
+                  fontSize: 11,
+                  fontWeight: 700,
+                  padding: "2px 8px",
+                  borderRadius: 12,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 4,
+                }}
+              >
+                {isHealthy ? <CheckCircle2 size={12} /> : <AlertTriangle size={12} />}
+                {isHealthy ? "Biodigester Optimal" : "Perhatian Operasional"}
+              </span>
+            </div>
+            <p style={{ margin: 0, fontSize: 12, color: "var(--text-secondary)", marginTop: 2 }}>
+              Hasil pemodelan analitik cerdas berbasis data 30 hari untuk efisiensi transisi energi Jantho
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={() => handleOpenAi("Prediksi produksi biogas minggu depan dan rekomendasi operasional?")}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            background: "linear-gradient(135deg, #1a3d1e 0%, #2d6833 100%)",
+            color: "#ffffff",
+            padding: "8px 16px",
+            borderRadius: "var(--radius-md)",
+            border: "1px solid rgba(168, 220, 169, 0.4)",
+            fontSize: 12.5,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 2px 8px rgba(13, 31, 15, 0.15)",
+            transition: "all 0.15s ease",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-1px)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+        >
+          <Sparkles size={14} color="#5eead4" />
+          <span>Buka AI Advisor</span>
+        </button>
+      </div>
+
+      {/* 4 Forecast Highlights */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: 12,
+          marginBottom: 16,
+        }}
+      >
+        <div style={{ background: "#ffffff", padding: "12px 14px", borderRadius: 10, border: "1px solid var(--border-default)" }}>
+          <div style={{ fontSize: 11, color: "var(--text-secondary)", fontWeight: 600 }}>Proyeksi Biogas (7 Hari)</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: "var(--color-bio-500)", marginTop: 2 }}>
+            {projBiogas.toFixed(1)} <span style={{ fontSize: 13, fontWeight: 600 }}>m³</span>
+          </div>
+          <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>Sanggup suplai ~{projHH} KK warga</div>
+        </div>
+
+        <div style={{ background: "#ffffff", padding: "12px 14px", borderRadius: 10, border: "1px solid var(--border-default)" }}>
+          <div style={{ fontSize: 11, color: "var(--text-secondary)", fontWeight: 600 }}>Kebutuhan Substrat Limbah</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: "var(--color-forest-700)", marginTop: 2 }}>
+            {projManure.toLocaleString("id-ID")} <span style={{ fontSize: 13, fontWeight: 600 }}>kg</span>
+          </div>
+          <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>Air pengenceran ~{projWater.toLocaleString("id-ID")} L/hari (1:1)</div>
+        </div>
+
+        <div style={{ background: "#ffffff", padding: "12px 14px", borderRadius: 10, border: "1px solid var(--border-default)" }}>
+          <div style={{ fontSize: 11, color: "var(--text-secondary)", fontWeight: 600 }}>Ketersediaan Bio-Slurry Cair</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: "var(--color-earth-500)", marginTop: 2 }}>
+            {projSlurry.toLocaleString("id-ID")} <span style={{ fontSize: 13, fontWeight: 600 }}>L</span>
+          </div>
+          <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>Siap salur ke kelompok tani</div>
+        </div>
+
+        <div style={{ background: "#ffffff", padding: "12px 14px", borderRadius: 10, border: "1px solid var(--border-default)" }}>
+          <div style={{ fontSize: 11, color: "var(--text-secondary)", fontWeight: 600 }}>Substitusi & Penghematan</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: "#16a34a", marginTop: 2 }}>
+            ~{projLpg.toFixed(0)} <span style={{ fontSize: 13, fontWeight: 600 }}>Tabung 3kg</span>
+          </div>
+          <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>Hemat Rp {projSavings.toLocaleString("id-ID")} / pekan</div>
+        </div>
+      </div>
+
+      {/* AI Tactical Recommendations & Quick Questions */}
+      <div
+        style={{
+          background: "var(--color-forest-50)",
+          borderRadius: 10,
+          padding: "12px 16px",
+          border: "1px solid var(--border-default)",
+        }}
+      >
+        <div style={{ fontSize: 12, fontWeight: 700, color: "var(--color-forest-900)", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+          <TrendingUp size={14} color="var(--color-forest-600)" />
+          Rekomendasi Taktis & Parameter Operasional AI:
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 6, fontSize: 12, color: "var(--text-primary)" }}>
+          <div>
+            • <b>Parameter Biokimiawi:</b> pH saat ini <b>{ph}</b> ({forecast.ph_assessment?.title}) dan tekanan <b>{press} bar</b> ({forecast.pressure_assessment?.title}).
+          </div>
+          <div>
+            • <b>Rasio Pengenceran:</b> Gunakan perbandingan 1 kg kotoran : 1 Liter air untuk menjaga Total Solids 8–10%.
+          </div>
+        </div>
+
+        {/* Quick Question Chips */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
+          <span style={{ fontSize: 11, fontWeight: 600, color: "var(--text-secondary)" }}>Tanyakan AI:</span>
+          {quickQuestions.map((q, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleOpenAi(q)}
+              style={{
+                fontSize: 11,
+                padding: "4px 10px",
+                borderRadius: 12,
+                background: "#ffffff",
+                border: "1px solid var(--border-default)",
+                color: "var(--color-forest-800)",
+                cursor: "pointer",
+                fontWeight: 600,
+                transition: "all 0.15s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-forest-100)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "#ffffff")}
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
@@ -226,6 +454,9 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* AI Bio-Energy Advisor & Proyeksi 7 Hari */}
+      <AIAdvisorCard forecast={summary?.forecast} />
 
       {/* Charts Section */}
       <div className="grid-2">

@@ -778,3 +778,23 @@ tbody tr:hover { background: var(--bg-card-hover); }
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
 }
 
+/* ─── AI COPILOT & ANIMATIONS ─────────────────── */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

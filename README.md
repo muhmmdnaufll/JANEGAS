@@ -104,5 +104,12 @@ Sistem dilengkapi tombol *quick-fill* akun demo di halaman Login:
 6. **Log Pemeliharaan (`/maintenance`)**:
    - Riwayat perawatan digester, pembersihan filter desulfurisasi H₂S, manometer, pipa gas, dan pencatatan biaya operasional.
 
+7. **AI Bio-Energy Advisor & Forecaster (Gemini 2.5 Flash + Local Engine)**:
+   - **Peramalan Bio-Energi 7 Hari**: Proyeksi output biogas (m³), kapasitas KK terlayani, kebutuhan substrat kotoran ternak, dan air pengenceran (rasio 1:1).
+   - **Diagnosis Kesehatan Biodigester**: Pemantauan otomatis derajat keasaman (pH) dan tekanan gas (bar) dengan deteksi dini risiko asidifikasi (*sour digester*) atau overpressure.
+   - **Proyeksi Bio-Slurry**: Estimasi ketersediaan pupuk organik cair (POC) & kompos padat untuk sawah/palawija Jantho.
+   - **Kalkulasi Dampak Lingkungan & Ekonomi**: Substitusi tabung LPG 3kg subsidi, penghematan belanja energi warga, dan reduksi emisi gas metana/CO₂e.
+   - **Interactive Copilot Drawer**: Dialog interaktif AI dengan *smart prompt chips*, rendering Markdown, dan fallback heuristik lokal saat offline.
+
 ---
 *Dikembangkan untuk Inisiatif BREYI 2026 (Bali Renewable Energy Young Innovators)*

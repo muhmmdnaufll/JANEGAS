@@ -61,4 +61,8 @@ export const maintenanceService = {
   update: (id, data) => api.put(`/maintenance/${id}`, data),
   remove: (id) => api.delete(`/maintenance/${id}`),
 };
+export const forecastService = {
+  getForecast: () => api.get("/forecast/predict"),
+  chat: (message) => api.post("/forecast/chat", { message }),
+};
 export default api;

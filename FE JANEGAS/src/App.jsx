@@ -8,6 +8,7 @@ import BiogasProduction from "./views/BiogasProduction";
 import FertilizerDist from "./views/FertilizerDist";
 import Members from "./views/Members";
 import Maintenance from "./views/Maintenance";
+import AICopilotDrawer from "./components/AICopilotDrawer";
 import { 
   LayoutDashboard, 
   Layers, 
@@ -16,7 +17,8 @@ import {
   Users, 
   Wrench, 
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Sparkles
 } from "lucide-react";
 import "./index.css";
 
@@ -167,7 +169,31 @@ function Layout() {
               </p>
             )}
           </div>
-          <div className="topbar-meta">
+          <div className="topbar-meta" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <button
+              id="topbar-ai-btn"
+              onClick={() => window.dispatchEvent(new CustomEvent("open-janegas-ai"))}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                background: "linear-gradient(135deg, #1a3d1e 0%, #2d6833 100%)",
+                color: "#ffffff",
+                padding: "5px 14px",
+                borderRadius: 20,
+                border: "1px solid rgba(168, 220, 169, 0.4)",
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: "pointer",
+                boxShadow: "0 2px 6px rgba(13, 31, 15, 0.15)",
+                transition: "transform 0.15s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            >
+              <Sparkles size={13} color="#72c478" />
+              <span>Tanya JANEGAS AI</span>
+            </button>
             <span style={{ 
               display: "inline-flex", 
               alignItems: "center", 
@@ -198,6 +224,9 @@ function Layout() {
           </Routes>
         </main>
       </div>
+
+      {/* Global AI Copilot Drawer */}
+      <AICopilotDrawer />
     </div>
   );
 }

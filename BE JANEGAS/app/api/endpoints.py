@@ -216,6 +216,15 @@ def get_dashboard_summary(db: Session = Depends(get_db)):
     from app.core.database import db_status_note, is_serverless, engine
     is_ephemeral = is_serverless and "sqlite" in str(engine.url)
 
+    # Bio-Energy Forecast
+    try:
+        from app.services.forecaster import calculate_janegas_forecast
+        forecast = calculate_janegas_forecast(db)
+    except Exception as e:
+        import logging
+        logging.error(f"[Dashboard] Forecast calculation failed: {e}")
+        forecast = None
+
     return {
         "kpi": {
             "total_manure_kg": round(total_manure_kg, 1),
@@ -226,6 +235,7 @@ def get_dashboard_summary(db: Session = Depends(get_db)):
             "total_beneficiaries": total_peternak + total_tani,
             "max_households_served": max_hh,
         },
+        "forecast": forecast,
         "trend_biogas": [
             {
                 "date": str(p.production_date),
@@ -269,4 +279,25 @@ def get_dashboard_summary(db: Session = Depends(get_db)):
         ],
         "db_status_note": db_status_note,
         "is_ephemeral": is_ephemeral
-    }
+    }
+
+
+# --- FORECAST & AI ADVISOR ----------------------------------------------------
+@router.get("/forecast/predict", tags=["Forecast & AI"])
+def get_bioenergy_forecast(db: Session = Depends(get_db)):
+    from app.services.forecaster import calculate_janegas_forecast
+    try:
+        result = calculate_janegas_forecast(db)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gagal menghitung peramalan: {str(e)}")
+
+
+@router.post("/forecast/chat", response_model=schemas.AIChatResponse, tags=["Forecast & AI"])
+def chat_with_janegas_ai(request: schemas.AIChatRequest, db: Session = Depends(get_db)):
+    from app.services.gemini_service import analyze_janegas_with_gemini
+    try:
+        response_text = analyze_janegas_with_gemini(db, request.message)
+        return schemas.AIChatResponse(response=response_text)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gagal memproses konsultasi AI: {str(e)}")

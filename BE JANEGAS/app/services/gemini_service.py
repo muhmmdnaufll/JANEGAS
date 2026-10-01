@@ -170,7 +170,7 @@ def generate_local_janegas_analysis(context: dict, query: str) -> str:
 
     # 1. Pertanyaan Peramalan & Produksi Biogas
     if any(k in q for k in ["ramal", "prediksi", "forecast", "minggu depan", "output", "kapasitas"]):
-        return f"""### 🌿 Hasil Analisis AI — Peramalan Produksi Biogas JANEGAS
+        return f"""### Hasil Analisis AI - Peramalan Produksi Biogas JANEGAS
 Berdasarkan data operasional instalasi biodigester komunal Jantho selama 30 hari terakhir:
 
 * **Proyeksi Pasokan Kotoran 7 Hari**: **{fc['projected_7d_manure_kg']:,.1f} kg** (rata-rata ~{fc['projected_daily_manure_kg']:,.1f} kg/hari)
@@ -178,7 +178,7 @@ Berdasarkan data operasional instalasi biodigester komunal Jantho selama 30 hari
 * **Estimasi Produksi Biogas Mingguan**: **{fc['projected_7d_biogas_m3']:,.2f} m³** (rata-rata ~{fc['projected_daily_biogas_m3']:,.2f} m³/hari)
 * **Kapasitas Rumah Tangga Terlayani**: **{fc['projected_hh_capacity']} Kepala Keluarga (KK)** stabil tanpa penurunan tekanan.
 
-#### 💡 Dampak & Rekomendasi Taktis:
+#### Dampak & Rekomendasi Taktis:
 1. **Substitusi Bahan Bakar**: Setara dengan penghematan **{fc['projected_lpg_cylinders']:.1f} tabung LPG 3kg** subsidi atau senilai **Rp {fc['projected_economic_savings_idr']:,.0f}** per minggu bagi warga Jantho.
 2. **Kestabilan Suplai**: Lakukan pengisian slurry secara kontinu 2 kali sehari (pagi dan sore) untuk menjaga temperatur mesofilik bakteri metanogen.
 """
@@ -186,13 +186,13 @@ Berdasarkan data operasional instalasi biodigester komunal Jantho selama 30 hari
     # 2. Pertanyaan Pasokan Limbah / Kotoran Ternak
     if any(k in q for k in ["pasok", "limbah", "kotoran", "sapi", "kambing", "peternak", "bahan baku"]):
         peternak_rows = "\n".join([f"- **{p['name']}** ({p['village']}): {p['livestock']}" for p in pet["list"]])
-        return f"""### 🐄 Analisis Neraca Bahan Baku & Peternak Mitra
+        return f"""### Analisis Neraca Bahan Baku & Peternak Mitra
 Instalasi JANEGAS saat ini didukung oleh **{pet['total_peternak']} peternak mitra** dengan total populasi **{pet['total_sapi']} ekor sapi** dan **{pet['total_kambing']} ekor kambing**:
 
 #### Daftar Peternak Mitra di Jantho:
 {peternak_rows}
 
-#### 📋 Neraca & Prosedur Pengolahan Substrat:
+#### Neraca & Prosedur Pengolahan Substrat:
 * **Estimasi Pasokan Harian**: Rata-rata **{fc['projected_daily_manure_kg']:,.1f} kg/hari**.
 * **Rasio Air Ideal**: Wajib dicampur air bersih dengan perbandingan **1:1** ({fc['recommended_daily_water_liters']:,.0f} L air/hari) agar kadar padatan terlarut (Total Solids) terjaga di kisaran **8–10%**.
 * **Keunggulan Substrat Campuran**: Kotoran sapi menyediakan massa selulosa sebagai buffer keasaman, sedangkan kotoran kambing meningkatkan kandungan nitrogen dan potensi yield metana (+20%).
@@ -201,7 +201,7 @@ Instalasi JANEGAS saat ini didukung oleh **{pet['total_peternak']} peternak mitr
     # 3. Pertanyaan Bio-Slurry & Pupuk Organik untuk Kelompok Tani
     if any(k in q for k in ["pupuk", "slurry", "bio-slurry", "tani", "cair", "kompos", "poc"]):
         tani_rows = "\n".join([f"- **{t['name']}** (Kontak: {t['contact']}) — Wilayah: {t['village']}" for t in tani["list"]])
-        return f"""### 🌱 Proyeksi Distribusi Pupuk Organik Bio-Slurry
+        return f"""### Proyeksi Distribusi Pupuk Organik Bio-Slurry
 Pengolahan anaerobik limbah ternak JANEGAS menghasilkan produk sampingan bernilai tinggi:
 
 * **Bio-Slurry Cair (POC)**: Proyeksi **{fc['projected_7d_liquid_slurry_liters']:,.0f} Liter** dalam 7 hari ke depan.
@@ -210,7 +210,7 @@ Pengolahan anaerobik limbah ternak JANEGAS menghasilkan produk sampingan bernila
 #### Kelompok Tani Penerima Manfaat di Jantho:
 {tani_rows}
 
-#### 🎯 Panduan Aplikasi Lahan Tani:
+#### Panduan Aplikasi Lahan Tani:
 1. **Bio-Slurry Cair (POC)**: Encerkan 1:5 dengan air dan semprotkan pada tanaman padi atau palawija setiap 10-14 hari untuk menyuplai unsur hara makro (N, P, K) dan mikroba probiotik tanah.
 2. **Bio-Slurry Padat**: Sangat efektif sebagai pembenah tanah sebelum musim tanam guna meningkatkan kemampuan retensi air tanah Jantho yang berpasir.
 """
@@ -219,10 +219,10 @@ Pengolahan anaerobik limbah ternak JANEGAS menghasilkan produk sampingan bernila
     if any(k in q for k in ["ph", "tekanan", "bar", "rusak", "bocor", "sehat", "kondisi", "maintenance", "rawat"]):
         ph_info = fc["ph_assessment"]
         press_info = fc["pressure_assessment"]
-        status_icon = "✅" if fc["is_healthy"] else "⚠️"
+        status_text = "[STATUS: OPTIMAL]" if fc["is_healthy"] else "[STATUS: PERINGATAN OPERASIONAL]"
 
-        return f"""### 🔧 Diagnosis Kesehatan Operasional Biodigester
-Status Keseluruhan Sistem: **{status_icon} {'SEHAT & OPTIMAL' if fc['is_healthy'] else 'MEMERLUKAN PERHATIAN'}**
+        return f"""### Diagnosis Kesehatan Operasional Biodigester
+Status Keseluruhan Sistem: **{status_text}**
 
 * **Status pH Slurry**: **{fc['latest_ph']:.2f}** — *{ph_info['title']}*
   > *Catatan*: {ph_info['message']}
@@ -232,14 +232,14 @@ Status Keseluruhan Sistem: **{status_icon} {'SEHAT & OPTIMAL' if fc['is_healthy'
   > *Tindakan*: {press_info['recommendation']}
 * **Log Pemeliharaan**: {fc['maintenance_note']}
 
-#### 🛡️ Rekomendasi Checklist Operator KPS:
+#### Rekomendasi Checklist Operator KPS:
 1. Pastikan media besi spons (Fe₂O₃) pada scrubber H₂S diperiksa setiap 30 hari untuk mencegah korosi burner pipa.
 2. Pastikan water-trap pada jalur pipa terendah dikeringkan dari akumulasi kondensasi uap air.
 """
 
     # 5. Pertanyaan Dampak Lingkungan, Emisi, dan Penghematan Ekonomi
     if any(k in q for k in ["emisi", "lingkungan", "lpg", "hemat", "ekonomi", "co2", "breyi"]):
-        return f"""### 🌍 Dampak Transisi Energi & Reduksi Emisi (BREYI 2026)
+        return f"""### Dampak Transisi Energi & Reduksi Emisi (BREYI 2026)
 Inisiatif JANEGAS di Kota Jantho memberikan kontribusi nyata terhadap target Net-Zero Emission dan ekonomi sirkular:
 
 * **Substitusi LPG Subsidi**: Setara **{fc['projected_lpg_cylinders']:.1f} tabung 3kg** per minggu (~{fc['projected_lpg_kg_saved']} kg LPG).
@@ -250,10 +250,10 @@ Inisiatif JANEGAS di Kota Jantho memberikan kontribusi nyata terhadap target Net
 
     # Default Overview
     status_text = "Optimal & Siap Layani Warga" if fc["is_healthy"] else "Perlu Penyesuaian Operasional"
-    return f"""### 🌿 Selamat datang di JANEGAS AI Advisor!
+    return f"""### Selamat datang di JANEGAS AI Advisor!
 Saya adalah asisten cerdas sistem pemantauan bio-energi terpadu **Jantho Renewable Gas (JANEGAS)**.
 
-#### 📊 Ringkasan Kondisi Terkini:
+#### Ringkasan Kondisi Terkini:
 * **Kesehatan Biodigester**: **{status_text}** (pH: {fc['latest_ph']:.2f} | Tekanan: {fc['latest_pressure']:.2f} bar)
 * **Proyeksi Produksi 7 Hari**: **{fc['projected_7d_biogas_m3']:,.1f} m³** (~{fc['projected_hh_capacity']} KK terlayani)
 * **Kebutuhan Kotoran Ternak**: **{fc['projected_7d_manure_kg']:,.0f} kg** (Air pengenceran: {fc['recommended_daily_water_liters']:,.0f} L/hari)
