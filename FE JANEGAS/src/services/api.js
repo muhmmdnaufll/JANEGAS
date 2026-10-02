@@ -1,8 +1,18 @@
 import axios from "axios";
 
 const getBaseUrl = () => {
-  let url = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
-  url = url.trim().replace(/\/+$/, "");
+  let url = (import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api").trim();
+  url = url.replace(/\/+$/, "");
+  
+  // Auto-prepend https:// or http:// if protocol is missing
+  if (!url.startsWith("http://") && !url.startsWith("https://")) {
+    if (url.includes("localhost") || url.includes("127.0.0.1")) {
+      url = `http://${url}`;
+    } else {
+      url = `https://${url}`;
+    }
+  }
+
   if (!url.endsWith("/api")) {
     url = `${url}/api`;
   }

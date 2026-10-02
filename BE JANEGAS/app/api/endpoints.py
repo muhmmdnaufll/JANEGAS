@@ -65,7 +65,21 @@ def get_current_user(
     return user
 
 
+@router.get("/auth/login", tags=["Auth"])
+@router.get("/auth/login/", tags=["Auth"], include_in_schema=False)
+def login_get_info():
+    """Information endpoint for GET requests to /auth/login to avoid 405 Method Not Allowed."""
+    return {
+        "status": "online",
+        "service": "JANEGAS Auth API",
+        "method_required": "POST",
+        "expected_payload": {"username": "admin", "password": "..." },
+        "portal_url": "https://janegas.navablue.com"
+    }
+
+
 @router.post("/auth/login", response_model=schemas.LoginResponse, tags=["Auth"])
+@router.post("/auth/login/", response_model=schemas.LoginResponse, tags=["Auth"], include_in_schema=False)
 def login(login_req: schemas.LoginRequest, db: Session = Depends(get_db)):
     user = crud.authenticate_user(db, login_req.username, login_req.password)
     if not user:

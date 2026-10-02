@@ -16,7 +16,9 @@ app = FastAPI(
 
 origins = [
     "https://janegas.navablue.com",
+    "http://localhost:5173",
     "http://localhost:5174",
+    "http://127.0.0.1:5173",
     "http://127.0.0.1:5174",
     "http://localhost:3000",
 ]
@@ -24,7 +26,7 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_origin_regex=r"https://.*\.navablue\.com|https://.*\.pages\.dev|https://.*\.workers\.dev",
+    allow_origin_regex=r"https://.*\.navablue\.com|https://.*\.pages\.dev|https://.*\.workers\.dev|https://.*\.railway\.app|http://localhost:\d+|http://127\.0\.0\.1:\d+",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
