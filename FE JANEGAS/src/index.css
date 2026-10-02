@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..800;1,14..32,300..800&family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..800&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
 /* ═══════════════════════════════════════════════════════
    JANEGAS DASHBOARD — Earth & Green Living Theme
@@ -62,9 +62,10 @@
   --shadow-lg:  0 8px 32px rgba(13,31,15,0.14);
   --shadow-glow:0 0 24px rgba(58,125,64,0.25);
 
-  /* Typography */
-  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  /* Typography Inspired by Stripe, Linear, Vercel & Tesla */
+  --font-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-metric: "Inter", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Spacing */
   --sidebar-width: 256px;
@@ -271,7 +272,7 @@ body {
 
 .card-body { padding: 20px 24px 24px; }
 
-/* ─── KPI STAT CARDS ───────────────────────────── */
+/* ─── KPI STAT CARDS (Linear & Stripe Inspired) ── */
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -280,63 +281,98 @@ body {
 
 .kpi-card {
   background: var(--bg-card);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-lg);
-  padding: 20px 22px;
+  border: 1px solid rgba(24, 60, 28, 0.12);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-base);
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(13, 31, 15, 0.04), 0 4px 12px rgba(13, 31, 15, 0.02);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
 }
 
-.kpi-card::after {
+.kpi-card::before {
   content: "";
   position: absolute;
-  top: 0; right: 0;
-  width: 60px; height: 60px;
-  background: radial-gradient(circle, rgba(58,125,64,0.08) 0%, transparent 70%);
-  border-radius: 50%;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(58, 125, 64, 0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
 
 .kpi-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 22px rgba(13, 31, 15, 0.07), 0 2px 6px rgba(13, 31, 15, 0.04);
   transform: translateY(-2px);
-  border-color: var(--border-strong);
+  border-color: rgba(58, 125, 64, 0.35);
 }
 
+.kpi-card:hover::before {
+  opacity: 1;
+}
+
+/* Tactile Icon Container with Subdued Inset Plate */
 .kpi-icon-wrap {
-  width: 40px; height: 40px;
-  border-radius: var(--radius-md);
-  display: flex;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  background: var(--color-forest-50);
+  position: relative;
+  background: linear-gradient(180deg, #ffffff 0%, #f7faf7 100%);
+  border: 1px solid rgba(13, 31, 15, 0.10);
+  box-shadow: 0 1px 2px rgba(13, 31, 15, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+
+.kpi-icon-wrap svg {
+  stroke-width: 1.75px !important;
+  transition: transform 0.2s ease;
+}
+
+.kpi-card:hover .kpi-icon-wrap {
+  transform: scale(1.05);
+  box-shadow: 0 3px 10px rgba(13, 31, 15, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
 .kpi-label {
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  color: #526655;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.05em;
+  font-family: var(--font-sans);
 }
 
-.kpi-value {
-  font-size: 28px;
-  font-weight: 800;
+/* Linear & Stripe Tabular Lining Figures for Numbers */
+.kpi-value,
+.metric-number,
+.stat-number,
+.tabular-num {
+  font-family: var(--font-metric);
+  font-size: 26px;
+  font-weight: 750;
   color: var(--text-primary);
-  font-family: var(--font-mono);
-  line-height: 1;
+  line-height: 1.05;
+  font-feature-settings: "cv02" 1, "cv03" 1, "cv04" 1, "cv11" 1, "tnum" 1, "zero" 1;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.035em;
 }
 
 .kpi-unit {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-muted);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #64748b;
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
+  margin-left: 3px;
+  align-self: baseline;
 }
 
 .kpi-trend {
@@ -345,6 +381,23 @@ body {
   display: flex;
   align-items: center;
   gap: 3px;
+  font-family: var(--font-metric);
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Global Lucide Icon Stroke Refinement */
+.nav-item-icon,
+.topbar-meta svg,
+.btn svg,
+.card-header svg {
+  stroke-width: 1.75px !important;
+}
+
+/* Table Tabular Numeric Alignment */
+table th, table td {
+  font-feature-settings: "tnum" 1;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ─── BADGE / STATUS ───────────────────────────── */

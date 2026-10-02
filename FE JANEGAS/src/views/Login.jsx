@@ -141,7 +141,7 @@ export default function Login() {
         </div>
 
         <div style={{ marginTop: 20, textAlign: "center", fontSize: 11, color: "rgba(168, 213, 170, 0.5)" }}>
-          Bali Renewable Energy Young Innovators (BREYI) 2026
+          Inisiatif Transisi Energi Bersih Berbasis Komunitas
         </div>
       </div>
     </div>

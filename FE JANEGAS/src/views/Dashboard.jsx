@@ -12,8 +12,15 @@ import {
 
 const KPICard = ({ icon: Icon, label, value, unit, color = "#3a7d40", sub }) => (
   <div className="kpi-card">
-    <div className="kpi-icon-wrap" style={{ background: `${color}18`, color }}>
-      <Icon size={24} />
+    <div
+      className="kpi-icon-wrap"
+      style={{
+        background: `linear-gradient(145deg, ${color}16 0%, ${color}08 100%)`,
+        borderColor: `${color}28`,
+        color,
+      }}
+    >
+      <Icon size={19} strokeWidth={1.75} />
     </div>
     <div className="kpi-label">{label}</div>
     <div style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
@@ -210,32 +217,32 @@ const BioEnergyOptimizationCard = ({ forecast }) => {
       >
         <div style={{ background: "#ffffff", padding: "12px 14px", borderRadius: 10, border: "1px solid var(--border-default)" }}>
           <div style={{ fontSize: 11, color: "var(--text-secondary)", fontWeight: 600 }}>Proyeksi Biogas (7 Hari)</div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: "var(--color-bio-500)", marginTop: 2 }}>
-            {projBiogas.toFixed(1)} <span style={{ fontSize: 13, fontWeight: 600 }}>m³</span>
+          <div className="stat-number" style={{ fontSize: 22, fontWeight: 750, color: "var(--color-bio-500)", marginTop: 2 }}>
+            {projBiogas.toFixed(1)} <span style={{ fontSize: 13, fontWeight: 600, color: "#64748b" }}>m³</span>
           </div>
           <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>Sanggup suplai ~{projHH} KK warga</div>
         </div>
 
         <div style={{ background: "#ffffff", padding: "12px 14px", borderRadius: 10, border: "1px solid var(--border-default)" }}>
           <div style={{ fontSize: 11, color: "var(--text-secondary)", fontWeight: 600 }}>Kebutuhan Substrat Limbah</div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: "var(--color-forest-700)", marginTop: 2 }}>
-            {projManure.toLocaleString("id-ID")} <span style={{ fontSize: 13, fontWeight: 600 }}>kg</span>
+          <div className="stat-number" style={{ fontSize: 22, fontWeight: 750, color: "var(--color-forest-700)", marginTop: 2 }}>
+            {projManure.toLocaleString("id-ID")} <span style={{ fontSize: 13, fontWeight: 600, color: "#64748b" }}>kg</span>
           </div>
           <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>Air pengenceran ~{projWater.toLocaleString("id-ID")} L/hari (1:1)</div>
         </div>
 
         <div style={{ background: "#ffffff", padding: "12px 14px", borderRadius: 10, border: "1px solid var(--border-default)" }}>
           <div style={{ fontSize: 11, color: "var(--text-secondary)", fontWeight: 600 }}>Ketersediaan Bio-Slurry Cair</div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: "var(--color-earth-500)", marginTop: 2 }}>
-            {projSlurry.toLocaleString("id-ID")} <span style={{ fontSize: 13, fontWeight: 600 }}>L</span>
+          <div className="stat-number" style={{ fontSize: 22, fontWeight: 750, color: "var(--color-earth-500)", marginTop: 2 }}>
+            {projSlurry.toLocaleString("id-ID")} <span style={{ fontSize: 13, fontWeight: 600, color: "#64748b" }}>L</span>
           </div>
           <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>Siap salur ke kelompok tani</div>
         </div>
 
         <div style={{ background: "#ffffff", padding: "12px 14px", borderRadius: 10, border: "1px solid var(--border-default)" }}>
           <div style={{ fontSize: 11, color: "var(--text-secondary)", fontWeight: 600 }}>Substitusi &amp; Penghematan</div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: "#16a34a", marginTop: 2 }}>
-            ~{projLpg.toFixed(0)} <span style={{ fontSize: 13, fontWeight: 600 }}>Tabung 3kg</span>
+          <div className="stat-number" style={{ fontSize: 22, fontWeight: 750, color: "#16a34a", marginTop: 2 }}>
+            ~{projLpg.toFixed(0)} <span style={{ fontSize: 13, fontWeight: 600, color: "#64748b" }}>Tabung 3kg</span>
           </div>
           <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>Hemat Rp {projSavings.toLocaleString("id-ID")} / pekan</div>
         </div>
@@ -508,20 +515,20 @@ export default function Dashboard() {
           </div>
 
           <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-            <div style={{ background: "rgba(255, 255, 255, 0.08)", padding: "10px 16px", borderRadius: 10 }}>
+            <div style={{ background: "rgba(255, 255, 255, 0.08)", padding: "10px 16px", borderRadius: 10, border: "1px solid rgba(255, 255, 255, 0.12)" }}>
               <div style={{ fontSize: 11, color: "#a8dca9", textTransform: "uppercase", letterSpacing: "1px" }}>
                 Substitusi LPG
               </div>
-              <div style={{ fontSize: 18, fontWeight: 800, color: "#ffffff", marginTop: 2 }}>
-                ~{lpgEquivalentKg} kg <span style={{ fontSize: 12, fontWeight: 500 }}>({lpgCylinderCount} tabung 3kg)</span>
+              <div className="stat-number" style={{ fontSize: 20, fontWeight: 750, color: "#ffffff", marginTop: 2 }}>
+                ~{lpgEquivalentKg} kg <span style={{ fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,0.75)" }}>({lpgCylinderCount} tabung 3kg)</span>
               </div>
             </div>
 
-            <div style={{ background: "rgba(255, 255, 255, 0.08)", padding: "10px 16px", borderRadius: 10 }}>
+            <div style={{ background: "rgba(255, 255, 255, 0.08)", padding: "10px 16px", borderRadius: 10, border: "1px solid rgba(255, 255, 255, 0.12)" }}>
               <div style={{ fontSize: 11, color: "#a8dca9", textTransform: "uppercase", letterSpacing: "1px" }}>
                 Reduksi Emisi Metana & CO₂
               </div>
-              <div style={{ fontSize: 18, fontWeight: 800, color: "#5eead4", marginTop: 2 }}>
+              <div className="stat-number" style={{ fontSize: 20, fontWeight: 750, color: "#5eead4", marginTop: 2 }}>
                 ~{emissionReductionKg} kg CO₂e
               </div>
             </div>

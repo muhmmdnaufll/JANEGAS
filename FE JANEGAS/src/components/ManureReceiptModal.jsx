@@ -110,7 +110,7 @@ export default function ManureReceiptModal({ item, member, onClose }) {
           {/* Official Letterhead (KOP SURAT) */}
           <div style={{ textAlign: "center", borderBottom: "3px double #1e293b", paddingBottom: 14, marginBottom: 18 }}>
             <div style={{ fontSize: 10, letterSpacing: "2px", fontWeight: 800, color: "#166534", textTransform: "uppercase" }}>
-              Inisiatif Bali Renewable Energy Young Innovators (BREYI 2026)
+              Inisiatif Transisi Energi Bersih Berbasis Komunitas
             </div>
             <div style={{ fontSize: 18, fontWeight: 900, color: "#0f172a", marginTop: 2, letterSpacing: "-0.3px" }}>
               KELOMPOK PENGELOLA SISTEM (KPS) BIOGAS KOMUNAL

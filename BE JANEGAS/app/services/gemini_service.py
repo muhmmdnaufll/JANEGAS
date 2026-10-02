@@ -1,7 +1,7 @@
 """
 JANEGAS AI Advisor Service
 Integrates Google Gemini 2.5 Flash API with intelligent database state caching
-and an offline local heuristics engine for Jantho Renewable Gas (BREYI 2026).
+and an offline local heuristics engine for Jantho Renewable Gas.
 """
 
 import json
@@ -89,8 +89,7 @@ def build_janegas_context(db: Session) -> dict:
     return {
         "project_name": "JANEGAS (Jantho Renewable Gas)",
         "location": "Kota Jantho, Kabupaten Aceh Besar, Aceh",
-        "competition": "Bali Renewable Energy Young Innovators (BREYI) 2026",
-        "category": "Community-Based Energy Transition",
+        "category": "Community-Based Renewable Energy Transition",
         "peternak_summary": {
             "total_peternak": len(peternak),
             "total_sapi": total_cattle,
@@ -238,8 +237,8 @@ Status Keseluruhan Sistem: **{status_text}**
 """
 
     # 5. Pertanyaan Dampak Lingkungan, Emisi, dan Penghematan Ekonomi
-    if any(k in q for k in ["emisi", "lingkungan", "lpg", "hemat", "ekonomi", "co2", "breyi"]):
-        return f"""### Dampak Transisi Energi & Reduksi Emisi (BREYI 2026)
+    if any(k in q for k in ["emisi", "lingkungan", "lpg", "hemat", "ekonomi", "co2"]):
+        return f"""### Dampak Transisi Energi & Reduksi Emisi Komunitas
 Inisiatif JANEGAS di Kota Jantho memberikan kontribusi nyata terhadap target Net-Zero Emission dan ekonomi sirkular:
 
 * **Substitusi LPG Subsidi**: Setara **{fc['projected_lpg_cylinders']:.1f} tabung 3kg** per minggu (~{fc['projected_lpg_kg_saved']} kg LPG).
@@ -300,7 +299,7 @@ def analyze_janegas_with_gemini(db: Session, user_query: str) -> str:
 
     system_prompt = f"""
 Kamu adalah "JANEGAS AI Advisor", asisten kecerdasan buatan analitik energi terbarukan berbasis komunitas untuk proyek JANEGAS (Jantho Renewable Gas) di Kota Jantho, Kabupaten Aceh Besar, Aceh.
-Proyek ini berlaga dalam ajang Bali Renewable Energy Young Innovators (BREYI) 2026 kategori Community-Based Energy Transition.
+Inisiatif ini merupakan inovasi transisi energi berbasis komunitas (Community-Based Energy Transition).
 
 Peranmu:
 Membantu pengelola KPS (Kelompok Pengelola Sistem), operator biodigester, peternak mitra, dan kelompok tani dalam memantau, meramalkan, dan mengoptimalkan rantai pasok pengolahan limbah kotoran sapi/kambing menjadi biogas dan pupuk organik bio-slurry.

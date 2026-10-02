@@ -1,6 +1,6 @@
 """
 Bio-Energy Forecasting and Operational Optimization Engine for JANEGAS
-(Jantho Renewable Gas - BREYI 2026)
+(Jantho Renewable Gas)
 """
 
 from sqlalchemy.orm import Session

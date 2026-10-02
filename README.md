@@ -1,7 +1,7 @@
 # JANEGAS (Jantho Renewable Gas) Dashboard
 > **Inisiatif Energi Bersih Berbasis Komunitas Melalui Pemanfaatan Limbah Ternak**  
 > Kategori: *Community-Based Energy Transition*  
-> **Bali Renewable Energy Young Innovators (BREYI) 2026** — Kota Jantho, Aceh Besar
+> **Kota Jantho, Kabupaten Aceh Besar, Aceh**
 
 ---
 
@@ -117,4 +117,4 @@ Sistem dilengkapi tombol *quick-fill* akun demo di halaman Login:
    - **Modern Toast & Earth Confirmation Dialog**: Pengalaman pengguna terstandarisasi tanpa dialog mentah browser.
 
 ---
-*Dikembangkan untuk Inisiatif BREYI 2026 (Bali Renewable Energy Young Innovators)*
+*Dikembangkan untuk Inisiatif Transisi Energi Bersih Berbasis Komunitas (Community-Based Renewable Energy Transition)*

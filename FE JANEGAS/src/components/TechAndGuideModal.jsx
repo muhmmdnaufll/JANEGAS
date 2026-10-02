@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { 
   X, BookOpen, Layers, Sprout, Sparkles, ChevronRight,
-  Info, Cpu, Users, Wrench
+  Info, Cpu, Users, Wrench, Activity, Scale
 } from "lucide-react";
 
 export default function TechAndGuideModal({ isOpen, onClose }) {
@@ -40,7 +40,7 @@ export default function TechAndGuideModal({ isOpen, onClose }) {
           borderRadius: 16,
           boxShadow: "0 25px 60px rgba(0,0,0,0.3)",
           color: "#1e293b",
-          fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+          fontFamily: "var(--font-sans)",
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
@@ -78,7 +78,7 @@ export default function TechAndGuideModal({ isOpen, onClose }) {
                 Pusat Edukasi Teknologi &amp; Panduan Penggunaan JANEGAS
               </h3>
               <p style={{ margin: 0, fontSize: 12, color: "#a8dca9", marginTop: 2 }}>
-                Dokumentasi Rekayasa Bio-Energi &amp; Standar Operasional Komunitas (BREYI 2026)
+                Dokumentasi Rekayasa Bio-Energi &amp; Standar Operasional Komunitas Terpadu
               </p>
             </div>
           </div>
@@ -208,8 +208,9 @@ export default function TechAndGuideModal({ isOpen, onClose }) {
                 </h4>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   <div style={{ border: "1px solid #e2e8f0", borderRadius: 8, padding: "12px 14px" }}>
-                    <div style={{ fontWeight: 700, color: "#0f172a", marginBottom: 6 }}>
-                      🏗️ Desain Kubah Tetap (Fixed-Dome Digester)
+                    <div style={{ fontWeight: 700, color: "#0f172a", marginBottom: 6, display: "flex", alignItems: "center", gap: 6 }}>
+                      <Layers size={16} strokeWidth={1.75} color="#166534" />
+                      <span>Desain Kubah Tetap (Fixed-Dome Digester)</span>
                     </div>
                     <p style={{ margin: 0, fontSize: 12, color: "#475569" }}>
                       Konstruksi ditanam di bawah tanah (underground) untuk menjaga stabilitas suhu mesofilik (30–38°C) dari cuaca tropis Jantho. Kubah beton kedap gas menampung akumulasi metana hingga tekanan 1.5 bar.
@@ -217,8 +218,9 @@ export default function TechAndGuideModal({ isOpen, onClose }) {
                   </div>
 
                   <div style={{ border: "1px solid #e2e8f0", borderRadius: 8, padding: "12px 14px" }}>
-                    <div style={{ fontWeight: 700, color: "#0f172a", marginBottom: 6 }}>
-                      🧪 Pemurnian H₂S (Desulfurizer Iron Sponge)
+                    <div style={{ fontWeight: 700, color: "#0f172a", marginBottom: 6, display: "flex", alignItems: "center", gap: 6 }}>
+                      <Activity size={16} strokeWidth={1.75} color="#0ea5a0" />
+                      <span>Pemurnian H₂S (Desulfurizer Iron Sponge)</span>
                     </div>
                     <p style={{ margin: 0, fontSize: 12, color: "#475569" }}>
                       Sebelum disalurkan ke jaringan pipa kompor warga, biogas dialirkan melalui tabung berisi serbuk besi oksida (Fe₂O₃) untuk menyerap gas asam H₂S, mencegah bau tidak sedap dan korosi pada burner kompor.
@@ -226,8 +228,9 @@ export default function TechAndGuideModal({ isOpen, onClose }) {
                   </div>
 
                   <div style={{ border: "1px solid #e2e8f0", borderRadius: 8, padding: "12px 14px" }}>
-                    <div style={{ fontWeight: 700, color: "#0f172a", marginBottom: 6 }}>
-                      ⚖️ Rasio Pengenceran Wajib (1:1)
+                    <div style={{ fontWeight: 700, color: "#0f172a", marginBottom: 6, display: "flex", alignItems: "center", gap: 6 }}>
+                      <Scale size={16} strokeWidth={1.75} color="#8b5e3c" />
+                      <span>Rasio Pengenceran Wajib (1:1)</span>
                     </div>
                     <p style={{ margin: 0, fontSize: 12, color: "#475569" }}>
                       Setiap 1 kg kotoran segar harus diencerkan dengan 1 liter air bersih untuk mempertahankan Total Solids (TS) pada kisaran 8–10%, mencegah endapan kerak tebal (scum) di bagian atas digester.
@@ -235,8 +238,9 @@ export default function TechAndGuideModal({ isOpen, onClose }) {
                   </div>
 
                   <div style={{ border: "1px solid #e2e8f0", borderRadius: 8, padding: "12px 14px" }}>
-                    <div style={{ fontWeight: 700, color: "#0f172a", marginBottom: 6 }}>
-                      🌱 Hasil Sampingan Bio-Slurry
+                    <div style={{ fontWeight: 700, color: "#0f172a", marginBottom: 6, display: "flex", alignItems: "center", gap: 6 }}>
+                      <Sprout size={16} strokeWidth={1.75} color="#22c55e" />
+                      <span>Hasil Sampingan Bio-Slurry</span>
                     </div>
                     <p style={{ margin: 0, fontSize: 12, color: "#475569" }}>
                       Limbah fermentasi yang keluar (bio-slurry) bebas dari patogen dan bibit gulma. Dipisahkan menjadi Pupuk Organik Cair (POC 85%) dan Kompos Padat (15%) yang kaya hara makro (N, P, K) untuk kelompok tani Jantho.
@@ -384,7 +388,7 @@ export default function TechAndGuideModal({ isOpen, onClose }) {
           }}
         >
           <div style={{ color: "#64748b" }}>
-            * Modul edukasi teknis &amp; kepatuhan operasional program JANEGAS — BREYI 2026
+            * Modul edukasi teknis &amp; kepatuhan operasional program JANEGAS Terbarukan
           </div>
           <button
             onClick={onClose}

@@ -1,7 +1,7 @@
 # JANEGAS Frontend Dashboard (Web Client)
 > **Jantho Renewable Gas (JANEGAS) Web Application**  
 > Inisiatif Transisi Energi Berbasis Komunitas Melalui Pengolahan Limbah Ternak Menjadi Biogas & Bio-Slurry  
-> *Bali Renewable Energy Young Innovators (BREYI) 2026* — Kota Jantho, Aceh Besar
+> **Kota Jantho, Kabupaten Aceh Besar, Aceh**
 
 ---
 
@@ -71,4 +71,4 @@ VITE_API_URL=http://127.0.0.1:8000/api
 
 ---
 
-*Dikembangkan untuk Inisiatif BREYI 2026 (Bali Renewable Energy Young Innovators)*
+*Dikembangkan untuk Inisiatif Transisi Energi Bersih Berbasis Komunitas (Community-Based Renewable Energy Transition)*

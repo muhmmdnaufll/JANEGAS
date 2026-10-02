@@ -224,7 +224,7 @@ function Layout() {
               color: "var(--color-forest-700)"
             }}>
               <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#22c55e" }}></span>
-              BREYI 2026 • Jantho, Aceh Besar
+              Energi Terbarukan • Jantho, Aceh Besar
             </span>
           </div>
         </header>

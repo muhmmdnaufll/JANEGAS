@@ -56,21 +56,21 @@ export default function AICopilotDrawer({ summaryData }) {
       const projBiogas = fc.projected_7d_biogas_m3 || "26.1";
       const projHH = fc.projected_hh_capacity || "4";
       const lpgSaved = fc.projected_lpg_cylinders || "4.0";
-      return `### 🌿 Proyeksi Produksi Biogas 7 Hari ke Depan\n\n* **Estimasi Output Biogas**: **${projBiogas} m³** (~3.7 m³/hari)\n* **Kapasitas Pelayanan**: Sanggup menyuplai rutin hingga **${projHH} Kepala Keluarga (KK)** di kawasan Jantho.\n* **Substitusi Bahan Bakar**: Setara dengan penghematan **${lpgSaved} tabung LPG 3kg** subsidi.\n\n*Rekomendasi*: Lakukan pengisian kotoran kontinu pagi dan sore untuk menjaga aktivitas bakteri metanogen.`;
+      return `### Proyeksi Produksi Biogas 7 Hari ke Depan\n\n* **Estimasi Output Biogas**: **${projBiogas} m³** (~3.7 m³/hari)\n* **Kapasitas Pelayanan**: Sanggup menyuplai rutin hingga **${projHH} Kepala Keluarga (KK)** di kawasan Jantho.\n* **Substitusi Bahan Bakar**: Setara dengan penghematan **${lpgSaved} tabung LPG 3kg** subsidi.\n\n*Rekomendasi*: Lakukan pengisian kotoran kontinu pagi dan sore untuk menjaga aktivitas bakteri metanogen.`;
     }
 
     if (q.includes("pasok") || q.includes("kotoran") || q.includes("limbah") || q.includes("air") || q.includes("sapi")) {
-      return `### 🐄 Neraca Pasokan Limbah Kotoran Ternak\n\n* **Total Kotoran Terkumpul**: **${totalManure.toLocaleString("id-ID")} kg** dari peternak mitra Jantho.\n* **Rasio Pengenceran Wajib**: Campurkan kotoran ternak dengan air bersih bersuhu ruang dengan perbandingan **1:1**.\n* **Tujuan**: Mempertahankan kadar padatan terlarut (Total Solids) pada kisaran ideal **8–10%** agar slurry tidak menyumbat inlet digester.`;
+      return `### Neraca Pasokan Limbah Kotoran Ternak\n\n* **Total Kotoran Terkumpul**: **${totalManure.toLocaleString("id-ID")} kg** dari peternak mitra Jantho.\n* **Rasio Pengenceran Wajib**: Campurkan kotoran ternak dengan air bersih bersuhu ruang dengan perbandingan **1:1**.\n* **Tujuan**: Mempertahankan kadar padatan terlarut (Total Solids) pada kisaran ideal **8–10%** agar slurry tidak menyumbat inlet digester.`;
     }
 
     if (q.includes("ph") || q.includes("tekanan") || q.includes("kondisi") || q.includes("sehat") || q.includes("maintenance")) {
       const ph = fc.latest_ph || 7.2;
       const press = fc.latest_pressure || 1.2;
-      return `### 🔧 Diagnosis Kesehatan Operasional Biodigester\n\n* **Derajat Keasaman (pH)**: **${ph}** (Rentang optimal 6.8 – 7.6)\n* **Tekanan Gas Manometer**: **${press} bar** (Rentang kerja aman 1.0 – 1.5 bar)\n* **Status**: Instalasi beroperasi dalam parameter fermentasi anaerobik yang stabil.\n\n*Tindakan*: Periksa saluran kondensasi uap air (water-trap) dan pastikan desulfurizer H₂S dibersihkan berkala.`;
+      return `### Diagnosis Kesehatan Operasional Biodigester\n\n* **Derajat Keasaman (pH)**: **${ph}** (Rentang optimal 6.8 – 7.6)\n* **Tekanan Gas Manometer**: **${press} bar** (Rentang kerja aman 1.0 – 1.5 bar)\n* **Status**: Instalasi beroperasi dalam parameter fermentasi anaerobik yang stabil.\n\n*Tindakan*: Periksa saluran kondensasi uap air (water-trap) dan pastikan desulfurizer H₂S dibersihkan berkala.`;
     }
 
     if (q.includes("pupuk") || q.includes("slurry") || q.includes("tani") || q.includes("cair") || q.includes("kompos")) {
-      return `### 🌱 Ketersediaan & Distribusi Pupuk Bio-Slurry\n\n* **Pupuk Organik Cair (POC)**: Proyeksi siap salur **~270 Liter** untuk penyemprotan daun & perakaran.\n* **Kompos Padat Bio-Slurry**: Proyeksi **~48 kg** siap jemur untuk pembenah kesuburan tanah sawah Jantho.\n\n*Manfaat*: Mengandung N-P-K alami dan mikroba dekomposer yang mempercepat pemulihan struktur tanah.`;
+      return `### Ketersediaan & Distribusi Pupuk Bio-Slurry\n\n* **Pupuk Organik Cair (POC)**: Proyeksi siap salur **~270 Liter** untuk penyemprotan daun & perakaran.\n* **Kompos Padat Bio-Slurry**: Proyeksi **~48 kg** siap jemur untuk pembenah kesuburan tanah sawah Jantho.\n\n*Manfaat*: Mengandung N-P-K alami dan mikroba dekomposer yang mempercepat pemulihan struktur tanah.`;
     }
 
     return `Saya mencatat data sistem JANEGAS: Total pasokan limbah terkumpul ${totalManure.toLocaleString("id-ID")} kg, produksi biogas ${totalBiogas.toLocaleString("id-ID")} m³ (substitusi ~${lpgCylinders} tabung LPG 3kg), dan melayani peternak serta kelompok tani di Kota Jantho. Anda dapat menanyakan peramalan produksi, kesehatan digester (pH/tekanan), atau pupuk bio-slurry!`;
