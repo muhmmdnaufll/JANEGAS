@@ -182,10 +182,10 @@ function Layout() {
                 padding: "6px 12px",
                 borderRadius: 20
               }}
-              title="Buka Penjelasan Rekayasa Teknologi & SOP Penggunaan"
+              title="Buka Panduan & Pengenalan Sistem JANEGAS"
             >
               <BookOpen size={14} color="var(--color-forest-700)" />
-              <span>Panduan &amp; Teknologi</span>
+              <span>Panduan Website</span>
             </button>
 
             <button

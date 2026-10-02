@@ -182,7 +182,7 @@ const BioEnergyOptimizationCard = ({ forecast }) => {
             style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12 }}
           >
             <BookOpen size={14} />
-            <span>Edukasi Teknologi &amp; SOP</span>
+            <span>Panduan &amp; Info Sistem</span>
           </button>
 
           <button
