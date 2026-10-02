@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { 
-  X, BookOpen, Layers, Flame, Sprout, Activity, 
-  ShieldAlert, Sparkles, CheckCircle2, ChevronRight,
-  Info, Cpu, Users, Wrench, HelpCircle
+  X, BookOpen, Layers, Sprout, Sparkles, ChevronRight,
+  Info, Cpu, Users, Wrench
 } from "lucide-react";
 
 export default function TechAndGuideModal({ isOpen, onClose }) {

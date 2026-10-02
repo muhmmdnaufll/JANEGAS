@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ToastProvider } from "./context/ToastContext";
@@ -10,6 +10,8 @@ import FertilizerDist from "./views/FertilizerDist";
 import Members from "./views/Members";
 import Maintenance from "./views/Maintenance";
 import JanegasLogo from "./components/JanegasLogo";
+import AICopilotDrawer from "./components/AICopilotDrawer";
+import TechAndGuideModal from "./components/TechAndGuideModal";
 import { 
   LayoutDashboard, 
   Layers, 
@@ -18,7 +20,9 @@ import {
   Users, 
   Wrench, 
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Sparkles,
+  BookOpen
 } from "lucide-react";
 import "./index.css";
 
@@ -51,6 +55,13 @@ function Layout() {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [showGuideModal, setShowGuideModal] = useState(false);
+
+  useEffect(() => {
+    const handleOpenGuide = () => setShowGuideModal(true);
+    window.addEventListener("open-tech-guide", handleOpenGuide);
+    return () => window.removeEventListener("open-tech-guide", handleOpenGuide);
+  }, []);
 
   if (!user) return <Navigate to="/login" replace />;
 
@@ -158,7 +169,48 @@ function Layout() {
               </p>
             )}
           </div>
-          <div className="topbar-meta">
+          <div className="topbar-meta" style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+            <button
+              id="topbar-btn-guide"
+              onClick={() => setShowGuideModal(true)}
+              className="btn btn-secondary btn-sm"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                fontSize: 12,
+                padding: "6px 12px",
+                borderRadius: 20
+              }}
+              title="Buka Penjelasan Rekayasa Teknologi & SOP Penggunaan"
+            >
+              <BookOpen size={14} color="var(--color-forest-700)" />
+              <span>Panduan &amp; Teknologi</span>
+            </button>
+
+            <button
+              id="topbar-btn-ai"
+              onClick={() => window.dispatchEvent(new CustomEvent("open-janegas-ai"))}
+              className="btn btn-sm"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                fontSize: 12,
+                padding: "6px 12px",
+                borderRadius: 20,
+                background: "linear-gradient(135deg, #1b4332 0%, #0d9488 100%)",
+                color: "#ffffff",
+                border: "none",
+                fontWeight: 600,
+                boxShadow: "0 2px 8px rgba(13, 148, 136, 0.25)"
+              }}
+              title="Konsultasi Cerdas Bersama JANEGAS AI Advisor"
+            >
+              <Sparkles size={14} color="#5eead4" />
+              <span>Tanya JANEGAS AI</span>
+            </button>
+
             <span style={{ 
               display: "inline-flex", 
               alignItems: "center", 
@@ -190,6 +242,11 @@ function Layout() {
         </main>
       </div>
 
+      {/* JANEGAS AI Copilot Drawer */}
+      <AICopilotDrawer />
+
+      {/* Pusat Penjelasan Teknologi & Panduan Penggunaan (SOP) Modal */}
+      <TechAndGuideModal isOpen={showGuideModal} onClose={() => setShowGuideModal(false)} />
     </div>
   );
 }

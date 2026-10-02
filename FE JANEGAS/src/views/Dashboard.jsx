@@ -7,7 +7,7 @@ import {
 import { 
   Layers, Flame, Sprout, Users, Building2, Home, 
   Activity, Clock, ShieldAlert, Leaf, RefreshCw,
-  Gauge, CheckCircle2, AlertTriangle
+  Gauge, CheckCircle2, AlertTriangle, Sparkles, BookOpen
 } from "lucide-react";
 
 const KPICard = ({ icon: Icon, label, value, unit, color = "#3a7d40", sub }) => (
@@ -149,22 +149,53 @@ const BioEnergyOptimizationCard = ({ forecast }) => {
           </div>
         </div>
 
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            background: "rgba(58, 125, 64, 0.08)",
-            color: "var(--color-forest-800)",
-            padding: "6px 12px",
-            borderRadius: "var(--radius-md)",
-            border: "1px solid var(--border-default)",
-            fontSize: 12,
-            fontWeight: 600,
-          }}
-        >
-          <Activity size={14} color="var(--color-forest-600)" />
-          <span>Pemodelan Stoikiometri Aktif</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              background: "rgba(58, 125, 64, 0.08)",
+              color: "var(--color-forest-800)",
+              padding: "6px 12px",
+              borderRadius: "var(--radius-md)",
+              border: "1px solid var(--border-default)",
+              fontSize: 12,
+              fontWeight: 600,
+            }}
+          >
+            <Activity size={14} color="var(--color-forest-600)" />
+            <span>Pemodelan Stoikiometri Aktif</span>
+          </div>
+
+          <button
+            id="btn-card-guide"
+            onClick={() => window.dispatchEvent(new CustomEvent("open-tech-guide"))}
+            className="btn btn-secondary btn-sm"
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12 }}
+          >
+            <BookOpen size={14} />
+            <span>Edukasi Teknologi &amp; SOP</span>
+          </button>
+
+          <button
+            id="btn-card-ai"
+            onClick={() => window.dispatchEvent(new CustomEvent("open-janegas-ai", { detail: "Bagaimana analisis performa fermentasi anaerobik biodigester Jantho hari ini?" }))}
+            className="btn btn-primary btn-sm"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              fontSize: 12,
+              background: "linear-gradient(135deg, #166534 0%, #0d9488 100%)",
+              border: "none",
+              color: "#ffffff",
+              boxShadow: "0 2px 8px rgba(13, 148, 136, 0.25)"
+            }}
+          >
+            <Sparkles size={14} />
+            <span>Konsultasi AI Advisor</span>
+          </button>
         </div>
       </div>
 

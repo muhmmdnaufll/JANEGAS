@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { Sparkles, Send, X, Bot, Loader2, RefreshCw, ChevronRight, Activity, Flame } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { Sparkles, Send, X, Loader2, RefreshCw } from "lucide-react";
 import { forecastService } from "../services/api";
 import JanegasLogo from "./JanegasLogo";
 
@@ -22,13 +22,14 @@ export default function AICopilotDrawer({ summaryData }) {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
+  const handleSendRef = useRef(null);
 
   // Listen to external custom event to open drawer with optional initial query
   useEffect(() => {
     const handleOpenEvent = (event) => {
       setIsOpen(true);
       if (event.detail && typeof event.detail === "string") {
-        handleSend(event.detail);
+        handleSendRef.current?.(event.detail);
       }
     };
     window.addEventListener("open-janegas-ai", handleOpenEvent);
@@ -99,6 +100,7 @@ export default function AICopilotDrawer({ summaryData }) {
       setIsTyping(false);
     }
   };
+  handleSendRef.current = handleSend;
 
   const handleClearChat = () => {
     setMessages([
