@@ -7,7 +7,7 @@ import {
 import { 
   Layers, Flame, Sprout, Users, Building2, Home, 
   Activity, Clock, ShieldAlert, Leaf, RefreshCw,
-  Sparkles, TrendingUp, CheckCircle2, AlertTriangle
+  Gauge, CheckCircle2, AlertTriangle
 } from "lucide-react";
 
 const KPICard = ({ icon: Icon, label, value, unit, color = "#3a7d40", sub }) => (
@@ -48,7 +48,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
-const AIAdvisorCard = ({ forecast }) => {
+const BioEnergyOptimizationCard = ({ forecast }) => {
   if (!forecast) return null;
 
   const isHealthy = forecast.is_healthy;
@@ -62,16 +62,8 @@ const AIAdvisorCard = ({ forecast }) => {
   const projLpg = forecast.projected_lpg_cylinders || 0;
   const projSavings = forecast.projected_economic_savings_idr || 0;
 
-  const handleOpenAi = (query) => {
-    window.dispatchEvent(new CustomEvent("open-janegas-ai", { detail: query }));
-  };
-
-  const quickQuestions = [
-    "Prediksi biogas 7 hari ke depan?",
-    "Status pH & tekanan digester?",
-    "Neraca kotoran ternak & rasio air?",
-    "Kesiapan pupuk bio-slurry?"
-  ];
+  const phStatus = forecast.ph_assessment?.status || (ph >= 6.8 && ph <= 7.6 ? "optimal" : "warning");
+  const pressStatus = forecast.pressure_assessment?.status || (press >= 1.0 && press <= 1.5 ? "optimal" : "warning");
 
   return (
     <div
@@ -118,19 +110,20 @@ const AIAdvisorCard = ({ forecast }) => {
               width: 38,
               height: 38,
               borderRadius: 10,
-              background: "linear-gradient(135deg, #1a3d1e 0%, #14b8b3 100%)",
+              background: "linear-gradient(135deg, #1a3d1e 0%, #0ea5a0 100%)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "0 2px 8px rgba(20, 184, 179, 0.3)",
+              boxShadow: "0 2px 8px rgba(14, 165, 160, 0.3)",
+              color: "#ffffff",
             }}
           >
-            <Sparkles size={20} color="#ffffff" />
+            <Gauge size={20} />
           </div>
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
               <h3 style={{ fontSize: 16, fontWeight: 700, margin: 0, color: "var(--color-forest-900)" }}>
-                AI Bio-Energy Advisor & Proyeksi 7 Hari
+                Pusat Optimasi Bio-Energi &amp; Proyeksi Teknis 7 Hari
               </h3>
               <span
                 style={{
@@ -147,38 +140,32 @@ const AIAdvisorCard = ({ forecast }) => {
                 }}
               >
                 {isHealthy ? <CheckCircle2 size={12} /> : <AlertTriangle size={12} />}
-                {isHealthy ? "Biodigester Optimal" : "Perhatian Operasional"}
+                {isHealthy ? "Parameter Biodigester Optimal" : "Perhatian Parameter Operasional"}
               </span>
             </div>
             <p style={{ margin: 0, fontSize: 12, color: "var(--text-secondary)", marginTop: 2 }}>
-              Hasil pemodelan analitik cerdas berbasis data 30 hari untuk efisiensi transisi energi Jantho
+              Kalkulasi neraca massa fermentasi anaerobik berbasis riwayat 30 hari untuk efisiensi transisi energi Jantho
             </p>
           </div>
         </div>
 
-        <button
-          onClick={() => handleOpenAi("Prediksi produksi biogas minggu depan dan rekomendasi operasional?")}
+        <div
           style={{
             display: "inline-flex",
             alignItems: "center",
             gap: 6,
-            background: "linear-gradient(135deg, #1a3d1e 0%, #2d6833 100%)",
-            color: "#ffffff",
-            padding: "8px 16px",
+            background: "rgba(58, 125, 64, 0.08)",
+            color: "var(--color-forest-800)",
+            padding: "6px 12px",
             borderRadius: "var(--radius-md)",
-            border: "1px solid rgba(168, 220, 169, 0.4)",
-            fontSize: 12.5,
-            fontWeight: 700,
-            cursor: "pointer",
-            boxShadow: "0 2px 8px rgba(13, 31, 15, 0.15)",
-            transition: "all 0.15s ease",
+            border: "1px solid var(--border-default)",
+            fontSize: 12,
+            fontWeight: 600,
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-1px)")}
-          onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
         >
-          <Sparkles size={14} color="#5eead4" />
-          <span>Buka AI Advisor</span>
-        </button>
+          <Activity size={14} color="var(--color-forest-600)" />
+          <span>Pemodelan Stoikiometri Aktif</span>
+        </div>
       </div>
 
       {/* 4 Forecast Highlights */}
@@ -215,7 +202,7 @@ const AIAdvisorCard = ({ forecast }) => {
         </div>
 
         <div style={{ background: "#ffffff", padding: "12px 14px", borderRadius: 10, border: "1px solid var(--border-default)" }}>
-          <div style={{ fontSize: 11, color: "var(--text-secondary)", fontWeight: 600 }}>Substitusi & Penghematan</div>
+          <div style={{ fontSize: 11, color: "var(--text-secondary)", fontWeight: 600 }}>Substitusi &amp; Penghematan</div>
           <div style={{ fontSize: 20, fontWeight: 800, color: "#16a34a", marginTop: 2 }}>
             ~{projLpg.toFixed(0)} <span style={{ fontSize: 13, fontWeight: 600 }}>Tabung 3kg</span>
           </div>
@@ -223,52 +210,108 @@ const AIAdvisorCard = ({ forecast }) => {
         </div>
       </div>
 
-      {/* AI Tactical Recommendations & Quick Questions */}
+      {/* Technical Status & Operational Evaluation Cards */}
       <div
         style={{
-          background: "var(--color-forest-50)",
-          borderRadius: 10,
-          padding: "12px 16px",
-          border: "1px solid var(--border-default)",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: 12,
         }}
       >
-        <div style={{ fontSize: 12, fontWeight: 700, color: "var(--color-forest-900)", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
-          <TrendingUp size={14} color="var(--color-forest-600)" />
-          Rekomendasi Taktis & Parameter Operasional AI:
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 6, fontSize: 12, color: "var(--text-primary)" }}>
-          <div>
-            • <b>Parameter Biokimiawi:</b> pH saat ini <b>{ph}</b> ({forecast.ph_assessment?.title}) dan tekanan <b>{press} bar</b> ({forecast.pressure_assessment?.title}).
+        {/* pH Card */}
+        <div
+          style={{
+            background: "#ffffff",
+            borderRadius: 10,
+            padding: "12px 14px",
+            border: phStatus === "optimal" ? "1px solid var(--border-default)" : "1px solid #fed7aa",
+            borderLeft: `4px solid ${phStatus === "optimal" ? "#22c55e" : "#f59e0b"}`,
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--color-forest-900)" }}>
+              Derajat Keasaman (pH Slurry)
+            </span>
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                padding: "2px 8px",
+                borderRadius: 8,
+                background: phStatus === "optimal" ? "rgba(34, 197, 94, 0.12)" : "rgba(245, 158, 11, 0.12)",
+                color: phStatus === "optimal" ? "#16a34a" : "#d97706",
+              }}
+            >
+              pH {ph}
+            </span>
           </div>
-          <div>
-            • <b>Rasio Pengenceran:</b> Gunakan perbandingan 1 kg kotoran : 1 Liter air untuk menjaga Total Solids 8–10%.
+          <div style={{ fontSize: 11.5, color: "var(--text-secondary)", lineHeight: 1.5 }}>
+            {forecast.ph_assessment?.recommendation || "Kondisi fermentasi metanogenik stabil pada rentang netral 6.8 - 7.6."}
           </div>
         </div>
 
-        {/* Quick Question Chips */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 10, flexWrap: "wrap" }}>
-          <span style={{ fontSize: 11, fontWeight: 600, color: "var(--text-secondary)" }}>Tanyakan AI:</span>
-          {quickQuestions.map((q, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleOpenAi(q)}
+        {/* Pressure Card */}
+        <div
+          style={{
+            background: "#ffffff",
+            borderRadius: 10,
+            padding: "12px 14px",
+            border: pressStatus === "optimal" ? "1px solid var(--border-default)" : "1px solid #fed7aa",
+            borderLeft: `4px solid ${pressStatus === "optimal" ? "#0ea5a0" : "#f59e0b"}`,
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--color-forest-900)" }}>
+              Tekanan Gas Biodigester
+            </span>
+            <span
               style={{
                 fontSize: 11,
-                padding: "4px 10px",
-                borderRadius: 12,
-                background: "#ffffff",
-                border: "1px solid var(--border-default)",
-                color: "var(--color-forest-800)",
-                cursor: "pointer",
-                fontWeight: 600,
-                transition: "all 0.15s ease",
+                fontWeight: 700,
+                padding: "2px 8px",
+                borderRadius: 8,
+                background: pressStatus === "optimal" ? "rgba(14, 165, 160, 0.12)" : "rgba(245, 158, 11, 0.12)",
+                color: pressStatus === "optimal" ? "#0ea5a0" : "#d97706",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-forest-100)")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "#ffffff")}
             >
-              {q}
-            </button>
-          ))}
+              {press} bar
+            </span>
+          </div>
+          <div style={{ fontSize: 11.5, color: "var(--text-secondary)", lineHeight: 1.5 }}>
+            {forecast.pressure_assessment?.recommendation || "Tekanan aman untuk transmisi pipa distribusi kompor warga Jantho."}
+          </div>
+        </div>
+
+        {/* Dilution Ratio & Feedstock Card */}
+        <div
+          style={{
+            background: "#ffffff",
+            borderRadius: 10,
+            padding: "12px 14px",
+            border: "1px solid var(--border-default)",
+            borderLeft: "4px solid var(--color-forest-500)",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--color-forest-900)" }}>
+              Rasio Pengenceran Substrat
+            </span>
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                padding: "2px 8px",
+                borderRadius: 8,
+                background: "rgba(58, 125, 64, 0.12)",
+                color: "var(--color-forest-800)",
+              }}
+            >
+              1 : 1 (TS 8-10%)
+            </span>
+          </div>
+          <div style={{ fontSize: 11.5, color: "var(--text-secondary)", lineHeight: 1.5 }}>
+            Campurkan 1 kg kotoran : 1 liter air untuk mempertahankan fluiditas slurry dan mencegah endapan kerak di inlet digester.
+          </div>
         </div>
       </div>
     </div>
@@ -455,8 +498,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* AI Bio-Energy Advisor & Proyeksi 7 Hari */}
-      <AIAdvisorCard forecast={summary?.forecast} />
+      {/* Pusat Optimasi Bio-Energi & Proyeksi Teknis 7 Hari */}
+      <BioEnergyOptimizationCard forecast={summary?.forecast} />
 
       {/* Charts Section */}
       <div className="grid-2">

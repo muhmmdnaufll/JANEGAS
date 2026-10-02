@@ -8,11 +8,12 @@
 ## 🌿 Gambaran Antarmuka
 
 Aplikasi frontend ini merupakan dashboard pemantauan terpadu untuk sistem **JANEGAS (Jantho Renewable Gas)**. Dashboard ini memvisualisasikan seluruh siklus rantai pasok energi bersih komunitas di Jantho:
-1. **Pasokan Limbah Ternak**: Pencatatan setoran kotoran sapi & kambing dari peternak mitra.
-2. **Produksi Biogas Komunal**: Pemantauan volume gas metana (m³), tekanan gas (bar), derajat keasaman (pH), dan jumlah KK terlayani.
-3. **Distribusi Bio-Slurry**: Penyaluran pupuk organik cair (POC) dan padat (kompos) ke kelompok tani binaan.
-4. **Anggota Komunitas**: Direktori terpadu mitra peternak dan kelompok tani.
-5. **Log Pemeliharaan**: Jadwal dan riwayat perawatan rutin serta perbaikan instalasi biodigester.
+1. **Pusat Optimasi Bio-Energi & Dashboard**: Neraca massa fermentasi anaerobik, proyeksi 7 hari, substitusi tabung LPG 3kg, dan reduksi emisi CO₂e.
+2. **Pasokan Limbah Ternak**: Pencatatan setoran kotoran sapi & kambing dari peternak mitra, filter rentang tanggal, dan ekspor CSV.
+3. **Produksi Biogas Komunal & EWS**: Pemantauan volume gas metana (m³), Early Warning System (EWS) untuk kestabilan pH slurry & tekanan manometer pipa, filter rentang tanggal, dan ekspor CSV.
+4. **Distribusi Bio-Slurry**: Penyaluran pupuk organik cair (POC) dan padat (kompos) ke kelompok tani binaan Jantho, filter tanggal, dan ekspor CSV.
+5. **Anggota Komunitas**: Direktori terpadu mitra peternak dan kelompok tani Jantho beserta ekspor data CSV.
+6. **Log Pemeliharaan**: Jadwal dan riwayat perawatan rutin serta perbaikan instalasi biodigester, filter rentang tanggal, dan ekspor CSV.
 
 ---
 

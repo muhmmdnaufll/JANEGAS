@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { fertilizerService, memberService } from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import { downloadCSV, FERTILIZER_COLUMNS } from "../utils/csvExport";
+import DateRangeFilter, { filterByDateRange } from "../components/DateRangeFilter";
 import { 
   Sprout, Plus, Search, Edit2, Trash2, X, 
-  Droplets, Package, Building2
+  Droplets, Package, Building2, Download
 } from "lucide-react";
 
 const FERT_TYPES = {
@@ -13,6 +16,7 @@ const FERT_TYPES = {
 
 export default function FertilizerDist() {
   const { user } = useAuth();
+  const { toast, openConfirm } = useToast();
   const canEdit = user?.role === "admin" || user?.role === "kps";
 
   const [distributions, setDistributions] = useState([]);
@@ -21,6 +25,7 @@ export default function FertilizerDist() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("all");
+  const [dateRange, setDateRange] = useState({ from: "", to: "" });
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -114,20 +119,23 @@ export default function FertilizerDist() {
       }
       setShowModal(false);
       loadData();
+      toast.success(editingItem ? "Data distribusi berhasil diperbarui." : "Distribusi pupuk baru berhasil dicatat.");
     } catch {
-      alert("Gagal menyimpan data distribusi pupuk.");
+      toast.error("Gagal menyimpan data distribusi pupuk.");
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Yakin ingin menghapus data distribusi pupuk ini?")) return;
+    const confirmed = await openConfirm("Yakin ingin menghapus data distribusi pupuk ini? Data yang dihapus tidak bisa dikembalikan.");
+    if (!confirmed) return;
     try {
       await fertilizerService.remove(id);
       loadData();
+      toast.success("Data distribusi pupuk berhasil dihapus.");
     } catch {
-      alert("Gagal menghapus data.");
+      toast.error("Gagal menghapus data distribusi pupuk.");
     }
   };
 
@@ -140,14 +148,15 @@ export default function FertilizerDist() {
   }, [members]);
 
   const filteredDistributions = useMemo(() => {
-    return distributions.filter((d) => {
+    const byDate = filterByDateRange(distributions, "distribution_date", dateRange.from, dateRange.to);
+    return byDate.filter((d) => {
       const recName = recipientMap[d.recipient_id] || "";
       const matchesSearch = recName.toLowerCase().includes(search.toLowerCase()) ||
         (d.notes && d.notes.toLowerCase().includes(search.toLowerCase()));
       const matchesFilter = filterType === "all" || d.fertilizer_type === filterType;
       return matchesSearch && matchesFilter;
     });
-  }, [distributions, search, filterType, recipientMap]);
+  }, [distributions, search, filterType, recipientMap, dateRange]);
 
   const totalCair = distributions
     .filter((d) => d.fertilizer_type === "cair")
@@ -155,6 +164,15 @@ export default function FertilizerDist() {
   const totalPadat = distributions
     .filter((d) => d.fertilizer_type === "padat")
     .reduce((s, d) => s + (d.quantity || 0), 0);
+
+  const handleExport = () => {
+    if (filteredDistributions.length === 0) {
+      toast.warning("Tidak ada data untuk diekspor.");
+      return;
+    }
+    downloadCSV(filteredDistributions, FERTILIZER_COLUMNS(recipientMap), "distribusi_pupuk");
+    toast.success(`${filteredDistributions.length} baris berhasil diekspor ke CSV.`);
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -229,12 +247,28 @@ export default function FertilizerDist() {
               <option value="padat">Bio-Slurry Padat</option>
             </select>
 
+            <DateRangeFilter
+              dateFrom={dateRange.from}
+              dateTo={dateRange.to}
+              onChange={setDateRange}
+            />
+
             {canEdit && (
               <button id="btn-add-fert" className="btn btn-primary btn-sm" onClick={openNewModal}>
                 <Plus size={16} />
                 <span>Salurkan Pupuk</span>
               </button>
             )}
+            <button
+              id="btn-export-fert"
+              className="btn btn-secondary btn-sm"
+              onClick={handleExport}
+              disabled={filteredDistributions.length === 0}
+              title="Ekspor data yang ditampilkan ke CSV"
+            >
+              <Download size={15} />
+              <span>Ekspor CSV</span>
+            </button>
           </div>
         </div>
 

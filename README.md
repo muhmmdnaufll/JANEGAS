@@ -89,13 +89,14 @@ Sistem dilengkapi tombol *quick-fill* akun demo di halaman Login:
    - Pencatatan harian volume kotoran sapi/kambing dari peternak mitra.
    - Filter jenis ternak, estimasi kadar air, dan pencarian pemasok.
 
-3. **Produksi Biogas (`/biogas`)**:
+3. **Produksi Biogas (`/biogas`) & Early Warning System (EWS)**:
    - Monitoring harian input slurry vs output volume gas metana (m³).
-   - Kontrol tekanan gas (bar), derajat keasaman (pH slurry), dan jumlah KK terlayani.
+   - **Early Warning System (EWS)**: Evaluasi visual stabilitas fermentasi anaerobik (pH meter dan manometer tekanan) untuk pencegahan dini risiko asidifikasi (*sour digester*) dan overpressure transmisi pipa gas.
+   - Kontrol KK terlayani dan status operasional digester.
 
 4. **Distribusi Pupuk Bio-Slurry (`/fertilizer`)**:
    - Penyaluran pupuk organik bio-slurry cair (POC) dan kompos padat untuk kelompok tani.
-   - Pelacakan peruntukan lahan sawah/palawija.
+   - Pelacakan peruntukan lahan sawah/palawija Jantho.
 
 5. **Anggota Komunitas (`/members`)**:
    - Direktori terpadu peternak mitra dan kelompok tani binaan di kawasan Jantho.
@@ -104,12 +105,16 @@ Sistem dilengkapi tombol *quick-fill* akun demo di halaman Login:
 6. **Log Pemeliharaan (`/maintenance`)**:
    - Riwayat perawatan digester, pembersihan filter desulfurisasi H₂S, manometer, pipa gas, dan pencatatan biaya operasional.
 
-7. **AI Bio-Energy Advisor & Forecaster (Gemini 2.5 Flash + Local Engine)**:
-   - **Peramalan Bio-Energi 7 Hari**: Proyeksi output biogas (m³), kapasitas KK terlayani, kebutuhan substrat kotoran ternak, dan air pengenceran (rasio 1:1).
-   - **Diagnosis Kesehatan Biodigester**: Pemantauan otomatis derajat keasaman (pH) dan tekanan gas (bar) dengan deteksi dini risiko asidifikasi (*sour digester*) atau overpressure.
+7. **Pusat Pemodelan Bio-Energi & Optimasi Operasional (Bio-Energy Engine)**:
+   - **Peramalan Bio-Energi 7 Hari**: Proyeksi output biogas (m³), kapasitas KK terlayani, kebutuhan substrat kotoran ternak, dan air pengenceran (rasio ideal 1:1, TS 8–10%).
+   - **Diagnosis Kesehatan Biokimiawi**: Pemantauan otomatis derajat keasaman (pH) dan tekanan gas (bar) dengan rekomendasi tindakan taktis operator.
    - **Proyeksi Bio-Slurry**: Estimasi ketersediaan pupuk organik cair (POC) & kompos padat untuk sawah/palawija Jantho.
    - **Kalkulasi Dampak Lingkungan & Ekonomi**: Substitusi tabung LPG 3kg subsidi, penghematan belanja energi warga, dan reduksi emisi gas metana/CO₂e.
-   - **Interactive Copilot Drawer**: Dialog interaktif AI dengan *smart prompt chips*, rendering Markdown, dan fallback heuristik lokal saat offline.
+
+8. **Fitur Tata Kelola & Transparansi Data Komunitas**:
+   - **Ekspor CSV Terintegrasi**: Unduh rekapitulasi data fisik/operasional di seluruh 5 modul untuk laporan pertanggungjawaban KPS dan peternak.
+   - **Filter Rentang Tanggal (Date Range)**: Filter transaksi dan produksi berdasarkan periode waktu evaluasi.
+   - **Modern Toast & Earth Confirmation Dialog**: Pengalaman pengguna terstandarisasi tanpa dialog mentah browser.
 
 ---
 *Dikembangkan untuk Inisiatif BREYI 2026 (Bali Renewable Energy Young Innovators)*

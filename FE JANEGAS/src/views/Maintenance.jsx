@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { maintenanceService } from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import { downloadCSV, MAINTENANCE_COLUMNS } from "../utils/csvExport";
+import DateRangeFilter, { filterByDateRange } from "../components/DateRangeFilter";
 import { 
   Wrench, Plus, Edit2, Trash2, X, AlertTriangle, 
-  CheckCircle2, Clock, DollarSign
+  CheckCircle2, Clock, DollarSign, Download
 } from "lucide-react";
 
 const LOG_TYPES = {
@@ -21,11 +24,13 @@ const STATUS_MAP = {
 
 export default function Maintenance() {
   const { user } = useAuth();
+  const { toast, openConfirm } = useToast();
   const canEdit = user?.role === "admin" || user?.role === "kps";
 
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [dateRange, setDateRange] = useState({ from: "", to: "" });
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -104,25 +109,42 @@ export default function Maintenance() {
       }
       setShowModal(false);
       loadData();
+      toast.success(editingItem ? "Catatan pemeliharaan berhasil diperbarui." : "Log pemeliharaan baru berhasil disimpan.");
     } catch {
-      alert("Gagal menyimpan catatan pemeliharaan.");
+      toast.error("Gagal menyimpan catatan pemeliharaan.");
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Yakin ingin menghapus catatan log ini?")) return;
+    const confirmed = await openConfirm("Yakin ingin menghapus catatan log pemeliharaan ini? Data yang dihapus tidak bisa dikembalikan.");
+    if (!confirmed) return;
     try {
       await maintenanceService.remove(id);
       loadData();
+      toast.success("Catatan pemeliharaan berhasil dihapus.");
     } catch {
-      alert("Gagal menghapus log.");
+      toast.error("Gagal menghapus catatan pemeliharaan.");
     }
   };
 
   const totalCost = logs.reduce((sum, item) => sum + (item.cost_idr || 0), 0);
   const pendingCount = logs.filter((l) => l.status !== "resolved").length;
+
+  const filteredLogs = useMemo(
+    () => filterByDateRange(logs, "log_date", dateRange.from, dateRange.to),
+    [logs, dateRange]
+  );
+
+  const handleExport = () => {
+    if (filteredLogs.length === 0) {
+      toast.warning("Tidak ada data untuk diekspor.");
+      return;
+    }
+    downloadCSV(filteredLogs, MAINTENANCE_COLUMNS, "log_pemeliharaan");
+    toast.success(`${filteredLogs.length} baris berhasil diekspor ke CSV.`);
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -166,15 +188,33 @@ export default function Maintenance() {
         <div className="card-header" style={{ flexWrap: "wrap", gap: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <h3 className="card-title">Log Pemeliharaan & Perawatan Biodigester</h3>
-            <span className="badge badge-forest">{logs.length} Catatan</span>
+            <span className="badge badge-forest">{filteredLogs.length} Catatan</span>
           </div>
 
-          {canEdit && (
-            <button id="btn-add-maint" className="btn btn-primary btn-sm" onClick={openNewModal}>
-              <Plus size={16} />
-              <span>Tambah Log Pemeliharaan</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+            <DateRangeFilter
+              dateFrom={dateRange.from}
+              dateTo={dateRange.to}
+              onChange={setDateRange}
+            />
+
+            {canEdit && (
+              <button id="btn-add-maint" className="btn btn-primary btn-sm" onClick={openNewModal}>
+                <Plus size={16} />
+                <span>Tambah Log Pemeliharaan</span>
+              </button>
+            )}
+            <button
+              id="btn-export-maint"
+              className="btn btn-secondary btn-sm"
+              onClick={handleExport}
+              disabled={filteredLogs.length === 0}
+              title="Ekspor log pemeliharaan ke CSV"
+            >
+              <Download size={15} />
+              <span>Ekspor CSV</span>
             </button>
-          )}
+          </div>
         </div>
 
         <div className="card-body">
@@ -199,7 +239,7 @@ export default function Maintenance() {
                   </tr>
                 </thead>
                 <tbody>
-                  {logs.length === 0 ? (
+                  {filteredLogs.length === 0 ? (
                     <tr>
                       <td colSpan={7}>
                         <div className="empty-state">
@@ -211,7 +251,7 @@ export default function Maintenance() {
                       </td>
                     </tr>
                   ) : (
-                    logs.map((item) => {
+                    filteredLogs.map((item) => {
                       const tInfo = LOG_TYPES[item.log_type] || LOG_TYPES.routine_maintenance;
                       const sInfo = STATUS_MAP[item.status] || STATUS_MAP.pending;
                       const StatusIcon = sInfo.icon;

@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { memberService } from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import { downloadCSV, MEMBER_COLUMNS } from "../utils/csvExport";
 import { 
   Users, Plus, Search, Edit2, Trash2, X, 
-  MapPin, CheckCircle2, XCircle, Building2, User
+  MapPin, CheckCircle2, XCircle, Building2, User, Download
 } from "lucide-react";
 
 export default function Members() {
   const { user } = useAuth();
+  const { toast, openConfirm } = useToast();
   const canEdit = user?.role === "admin" || user?.role === "kps";
 
   const [members, setMembers] = useState([]);
@@ -97,20 +100,23 @@ export default function Members() {
       }
       setShowModal(false);
       loadData();
+      toast.success(editingItem ? "Data anggota berhasil diperbarui." : "Anggota komunitas baru berhasil ditambahkan.");
     } catch {
-      alert("Gagal menyimpan data anggota.");
+      toast.error("Gagal menyimpan data anggota.");
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Yakin ingin menghapus anggota komunitas ini?")) return;
+    const confirmed = await openConfirm("Yakin ingin menghapus anggota komunitas ini? Data yang dihapus tidak bisa dikembalikan.");
+    if (!confirmed) return;
     try {
       await memberService.remove(id);
       loadData();
+      toast.success("Anggota komunitas berhasil dihapus.");
     } catch {
-      alert("Gagal menghapus anggota.");
+      toast.error("Gagal menghapus anggota.");
     }
   };
 
@@ -127,6 +133,15 @@ export default function Members() {
 
   const peternakCount = members.filter((m) => m.member_type === "peternak").length;
   const taniCount = members.filter((m) => m.member_type === "kelompok_tani").length;
+
+  const handleExport = () => {
+    if (filteredMembers.length === 0) {
+      toast.warning("Tidak ada data untuk diekspor.");
+      return;
+    }
+    downloadCSV(filteredMembers, MEMBER_COLUMNS, "direktori_anggota");
+    toast.success(`${filteredMembers.length} baris berhasil diekspor ke CSV.`);
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -207,6 +222,16 @@ export default function Members() {
                 <span>Tambah Anggota</span>
               </button>
             )}
+            <button
+              id="btn-export-members"
+              className="btn btn-secondary btn-sm"
+              onClick={handleExport}
+              disabled={filteredMembers.length === 0}
+              title="Ekspor direktori anggota ke CSV"
+            >
+              <Download size={15} />
+              <span>Ekspor CSV</span>
+            </button>
           </div>
         </div>
 

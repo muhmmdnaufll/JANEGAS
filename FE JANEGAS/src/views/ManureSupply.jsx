@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { manureService, memberService } from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import { downloadCSV, MANURE_COLUMNS } from "../utils/csvExport";
+import DateRangeFilter, { filterByDateRange } from "../components/DateRangeFilter";
+import ManureReceiptModal from "../components/ManureReceiptModal";
+import ManureReportModal from "../components/ManureReportModal";
 import { 
-  Layers, Plus, Search, Edit2, Trash2, X, Scale
+  Layers, Plus, Search, Edit2, Trash2, X, Scale, Download, Printer
 } from "lucide-react";
 
 const LIVESTOCK_LABELS = {
@@ -13,6 +18,7 @@ const LIVESTOCK_LABELS = {
 
 export default function ManureSupply() {
   const { user } = useAuth();
+  const { toast, openConfirm } = useToast();
   const canEdit = user?.role === "admin" || user?.role === "kps" || user?.role === "peternak";
 
   const [supplies, setSupplies] = useState([]);
@@ -21,6 +27,11 @@ export default function ManureSupply() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("all");
+  const [dateRange, setDateRange] = useState({ from: "", to: "" });
+
+  // Print Slip & Report State
+  const [selectedReceiptItem, setSelectedReceiptItem] = useState(null);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -106,20 +117,23 @@ export default function ManureSupply() {
       }
       setShowModal(false);
       loadData();
+      toast.success(editingItem ? "Data pasokan berhasil diperbarui." : "Catatan pasokan baru berhasil disimpan.");
     } catch {
-      alert("Gagal menyimpan data pasokan.");
+      toast.error("Gagal menyimpan data pasokan. Cek koneksi backend.");
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Yakin ingin menghapus catatan pasokan ini?")) return;
+    const confirmed = await openConfirm("Yakin ingin menghapus catatan pasokan ini? Data yang dihapus tidak bisa dikembalikan.");
+    if (!confirmed) return;
     try {
       await manureService.remove(id);
       loadData();
+      toast.success("Catatan pasokan berhasil dihapus.");
     } catch {
-      alert("Gagal menghapus data.");
+      toast.error("Gagal menghapus data pasokan.");
     }
   };
 
@@ -132,17 +146,32 @@ export default function ManureSupply() {
   }, [members]);
 
   const filteredSupplies = useMemo(() => {
-    return supplies.filter((s) => {
+    const byDate = filterByDateRange(supplies, "supply_date", dateRange.from, dateRange.to);
+    return byDate.filter((s) => {
       const suppName = supplierMap[s.supplier_id] || "";
       const matchesSearch = suppName.toLowerCase().includes(search.toLowerCase()) ||
         (s.notes && s.notes.toLowerCase().includes(search.toLowerCase()));
       const matchesFilter = filterType === "all" || s.livestock_type === filterType;
       return matchesSearch && matchesFilter;
     });
-  }, [supplies, search, filterType, supplierMap]);
+  }, [supplies, search, filterType, supplierMap, dateRange]);
 
   const totalKg = supplies.reduce((acc, curr) => acc + (curr.volume_kg || 0), 0);
   const avgKg = supplies.length ? (totalKg / supplies.length).toFixed(1) : 0;
+
+  const selectedMember = useMemo(() => {
+    if (!selectedReceiptItem) return null;
+    return members.find((m) => m.id === selectedReceiptItem.supplier_id);
+  }, [selectedReceiptItem, members]);
+
+  const handleExport = () => {
+    if (filteredSupplies.length === 0) {
+      toast.warning("Tidak ada data untuk diekspor.");
+      return;
+    }
+    downloadCSV(filteredSupplies, MANURE_COLUMNS(supplierMap), "pasokan_limbah_ternak");
+    toast.success(`${filteredSupplies.length} baris berhasil diekspor ke CSV.`);
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -220,12 +249,39 @@ export default function ManureSupply() {
               <option value="campuran">Campuran</option>
             </select>
 
+            {/* Date Range Filter */}
+            <DateRangeFilter
+              dateFrom={dateRange.from}
+              dateTo={dateRange.to}
+              onChange={setDateRange}
+            />
+
             {canEdit && (
               <button id="btn-add-supply" className="btn btn-primary btn-sm" onClick={openNewModal}>
                 <Plus size={16} />
                 <span>Input Pasokan</span>
               </button>
             )}
+            <button
+              id="btn-print-report"
+              className="btn btn-secondary btn-sm"
+              onClick={() => setShowReportModal(true)}
+              disabled={filteredSupplies.length === 0}
+              title="Cetak lembar rekapitulasi resmi / Simpan PDF"
+            >
+              <Printer size={15} />
+              <span>Cetak Rekap</span>
+            </button>
+            <button
+              id="btn-export-supply"
+              className="btn btn-secondary btn-sm"
+              onClick={handleExport}
+              disabled={filteredSupplies.length === 0}
+              title="Ekspor data yang ditampilkan ke CSV"
+            >
+              <Download size={15} />
+              <span>Ekspor CSV</span>
+            </button>
           </div>
         </div>
 
@@ -247,7 +303,7 @@ export default function ManureSupply() {
                     <th>Volume (kg)</th>
                     <th>Kadar Air (%)</th>
                     <th>Catatan</th>
-                    {canEdit && <th>Aksi</th>}
+                    <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -285,26 +341,36 @@ export default function ManureSupply() {
                           <td style={{ fontSize: 12.5, color: "var(--text-secondary)", maxWidth: 220 }}>
                             {item.notes || "-"}
                           </td>
-                          {canEdit && (
-                            <td>
-                              <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
-                                <button
-                                  className="btn btn-secondary btn-sm"
-                                  onClick={() => openEditModal(item)}
-                                  title="Edit"
-                                >
-                                  <Edit2 size={13} />
-                                </button>
-                                <button
-                                  className="btn btn-danger btn-sm"
-                                  onClick={() => handleDelete(item.id)}
-                                  title="Hapus"
-                                >
-                                  <Trash2 size={13} />
-                                </button>
-                              </div>
-                            </td>
-                          )}
+                          <td>
+                            <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+                              <button
+                                className="btn btn-secondary btn-sm"
+                                onClick={() => setSelectedReceiptItem(item)}
+                                title="Cetak Bukti Setor Fisik (Slip Timbang)"
+                                style={{ color: "var(--color-forest-700)" }}
+                              >
+                                <Printer size={13} />
+                              </button>
+                              {canEdit && (
+                                <>
+                                  <button
+                                    className="btn btn-secondary btn-sm"
+                                    onClick={() => openEditModal(item)}
+                                    title="Edit"
+                                  >
+                                    <Edit2 size={13} />
+                                  </button>
+                                  <button
+                                    className="btn btn-danger btn-sm"
+                                    onClick={() => handleDelete(item.id)}
+                                    title="Hapus"
+                                  >
+                                    <Trash2 size={13} />
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                          </td>
                         </tr>
                       );
                     })
@@ -434,6 +500,25 @@ export default function ManureSupply() {
             </form>
           </div>
         </div>
+      )}
+
+      {/* Slip Timbang Bukti Setor Fisik Modal */}
+      {selectedReceiptItem && (
+        <ManureReceiptModal
+          item={selectedReceiptItem}
+          member={selectedMember}
+          onClose={() => setSelectedReceiptItem(null)}
+        />
+      )}
+
+      {/* Rekapitulasi Pasokan Laporan Resmi Modal */}
+      {showReportModal && (
+        <ManureReportModal
+          supplies={filteredSupplies}
+          supplierMap={supplierMap}
+          dateRange={dateRange}
+          onClose={() => setShowReportModal(false)}
+        />
       )}
     </div>
   );

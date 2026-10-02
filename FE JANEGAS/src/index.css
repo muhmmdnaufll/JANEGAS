@@ -778,7 +778,7 @@ tbody tr:hover { background: var(--bg-card-hover); }
   .grid-2, .grid-3 { grid-template-columns: 1fr; }
 }
 
-/* ─── AI COPILOT & ANIMATIONS ─────────────────── */
+/* ─── TOAST NOTIFICATION ANIMATIONS ────────────── */
 @keyframes slideInRight {
   from {
     transform: translateX(100%);
@@ -790,11 +790,76 @@ tbody tr:hover { background: var(--bg-card-hover); }
   }
 }
 
+@keyframes slideInToast {
+  from {
+    transform: translateX(100%) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ==========================================================================
+   PRINT MEDIA RULES (BUKTI SETOR FISIK & LAPORAN RESMI KPS JANTHO)
+   ========================================================================== */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide navigation, buttons, and app shell chrome */
+  .sidebar,
+  .topbar,
+  .no-print,
+  .toast-container,
+  button,
+  .btn {
+    display: none !important;
+  }
+
+  .main-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  .modal-overlay {
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  .print-slip-container {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    page-break-inside: avoid;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm;
+  }
 }
 

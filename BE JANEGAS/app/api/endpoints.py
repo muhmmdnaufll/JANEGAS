@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
 from typing import List, Optional
+import jwt
 from app.core.database import get_db
+from app.core import security
 from app.crud import crud
 from app.schemas import schemas
 from app.models import models
@@ -9,7 +11,60 @@ from app.models import models
 router = APIRouter()
 
 
-# --- AUTH ---------------------------------------------------------------------
+# --- AUTH DEPENDENCY & ENDPOINTS ----------------------------------------------
+def get_current_user(
+    token: Optional[str] = None,
+    authorization: Optional[str] = Header(None),
+    db: Session = Depends(get_db)
+) -> models.User:
+    """
+    FastAPI dependency to extract and validate current authenticated user via JWT.
+    Supports both Authorization: Bearer <jwt> header and ?token=<jwt> parameter.
+    """
+    raw_token = token
+    if not raw_token and authorization:
+        raw_token = authorization.replace("Bearer ", "").strip()
+    if not raw_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Autentikasi diperlukan. Token tidak ditemukan.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    try:
+        payload = security.decode_access_token(raw_token)
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Sesi login telah kedaluwarsa. Silakan login kembali.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    except jwt.PyJWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token autentikasi tidak valid.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    if not payload:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token autentikasi tidak valid.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    user_id = payload.get("sub") or payload.get("user_id")
+    if not user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Identitas pengguna tidak ditemukan dalam token.")
+
+    user = db.query(models.User).filter(models.User.id == int(user_id)).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Pengguna tidak ditemukan.")
+    if not user.is_active:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Akun pengguna nonaktif.")
+    return user
+
+
 @router.post("/auth/login", response_model=schemas.LoginResponse, tags=["Auth"])
 def login(login_req: schemas.LoginRequest, db: Session = Depends(get_db)):
     user = crud.authenticate_user(db, login_req.username, login_req.password)
@@ -18,39 +73,26 @@ def login(login_req: schemas.LoginRequest, db: Session = Depends(get_db)):
     if not user.is_active:
         raise HTTPException(status_code=403, detail="Akun tidak aktif")
     member = db.query(models.Member).filter(models.Member.user_id == user.id).first()
-    token = f"janegas_token_{user.id}_{user.role}"
+
+    # Generate standard cryptographic JWT token
+    access_token = security.create_access_token(data={
+        "sub": str(user.id),
+        "username": user.username,
+        "role": user.role
+    })
+
     return schemas.LoginResponse(
-        access_token=token,
+        access_token=access_token,
         role=user.role,
         username=user.username,
         user_id=user.id,
         member_id=member.id if member else None
     )
 
+
 @router.get("/auth/users/me", response_model=schemas.UserResponse, tags=["Auth"])
-def get_current_user_info(
-    token: Optional[str] = None,
-    authorization: Optional[str] = Header(None),
-    db: Session = Depends(get_db)
-):
-    raw_token = token
-    if not raw_token and authorization:
-        raw_token = authorization.replace("Bearer ", "").strip()
-    if not raw_token:
-        raise HTTPException(status_code=401, detail="Token tidak ditemukan")
-
-    parts = raw_token.split("_")
-    if len(parts) < 4:
-        raise HTTPException(status_code=401, detail="Token tidak valid")
-    try:
-        user_id = int(parts[2])  # Format: janegas_token_{user.id}_{user.role}
-    except (ValueError, IndexError):
-        raise HTTPException(status_code=401, detail="Token tidak valid")
-
-    user = db.query(models.User).filter(models.User.id == user_id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User tidak ditemukan")
-    return user
+def get_current_user_info(current_user: models.User = Depends(get_current_user)):
+    return current_user
 
 
 # --- MEMBERS -----------------------------------------------------------------
