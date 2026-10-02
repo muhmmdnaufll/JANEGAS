@@ -24,7 +24,7 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_origin_regex=r"https://.*\.navablue\.com|https://.*\.pages\.dev",
+    allow_origin_regex=r"https://.*\.navablue\.com|https://.*\.pages\.dev|https://.*\.workers\.dev",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -39,7 +39,9 @@ def startup_event():
     finally:
         db.close()
 
+# Support both with /api prefix and direct routes
 app.include_router(router, prefix="/api")
+app.include_router(router)
 
 @app.get("/")
 def root():
