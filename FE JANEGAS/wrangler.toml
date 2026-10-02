@@ -1,3 +1,7 @@
-name = "janegas-dashboard"
-compatibility_date = "2024-01-01"
-pages_build_output_dir = "dist"
+name = "janegas"
+compatibility_date = "2024-09-23"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
