@@ -9,6 +9,7 @@ import FertilizerDist from "./views/FertilizerDist";
 import Members from "./views/Members";
 import Maintenance from "./views/Maintenance";
 import AICopilotDrawer from "./components/AICopilotDrawer";
+import JanegasLogo from "./components/JanegasLogo";
 import { 
   LayoutDashboard, 
   Layers, 
@@ -64,18 +65,7 @@ function Layout() {
       <aside className="sidebar">
         <div className="sidebar-logo">
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{
-              width: 38,
-              height: 38,
-              borderRadius: 10,
-              background: "linear-gradient(135deg, #2d6833 0%, #14b8b3 100%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 2px 8px rgba(20, 184, 179, 0.3)"
-            }}>
-              <Flame size={22} color="#ffffff" />
-            </div>
+            <JanegasLogo size={38} style={{ boxShadow: "0 2px 10px rgba(45, 106, 79, 0.4)" }} />
             <div>
               <div className="sidebar-logo-name">JANEGAS</div>
               <div className="sidebar-logo-tagline">Jantho Renewable Gas</div>

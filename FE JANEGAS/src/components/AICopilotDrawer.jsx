@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Sparkles, Send, X, Bot, Loader2, RefreshCw, ChevronRight, Activity, Flame } from "lucide-react";
 import { forecastService } from "../services/api";
+import JanegasLogo from "./JanegasLogo";
 
 const QUICK_PROMPTS = [
   "Prediksi produksi biogas 7 hari ke depan?",
@@ -261,19 +262,7 @@ export default function AICopilotDrawer({ summaryData }) {
             e.currentTarget.style.boxShadow = "0 8px 24px rgba(13, 31, 15, 0.25), 0 0 16px rgba(20, 184, 179, 0.35)";
           }}
         >
-          <div
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: "50%",
-              background: "rgba(255, 255, 255, 0.2)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Sparkles size={16} color="#5eead4" />
-          </div>
+          <JanegasLogo size={28} style={{ boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)" }} />
           <div style={{ textAlign: "left" }}>
             <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.02em" }}>Tanya JANEGAS AI</div>
             <div style={{ fontSize: 10, opacity: 0.85, fontWeight: 500 }}>Bio-Energy Advisor</div>
@@ -326,20 +315,7 @@ export default function AICopilotDrawer({ summaryData }) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div
-                style={{
-                  width: 38,
-                  height: 38,
-                  borderRadius: 10,
-                  background: "linear-gradient(135deg, #2d6833 0%, #14b8b3 100%)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 2px 10px rgba(20, 184, 179, 0.4)",
-                }}
-              >
-                <Flame size={20} color="#ffffff" />
-              </div>
+              <JanegasLogo size={38} style={{ boxShadow: "0 2px 10px rgba(45, 106, 79, 0.4)" }} />
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <h3 style={{ fontSize: 15, fontWeight: 700, margin: 0, letterSpacing: "-0.01em" }}>

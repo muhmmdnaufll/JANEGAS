@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Flame, ArrowRight, AlertCircle } from "lucide-react";
+import { ArrowRight, AlertCircle } from "lucide-react";
+import JanegasLogo from "../components/JanegasLogo";
 
 const DEMO_ACCOUNTS = [
   { label: "Admin KPS", username: "admin", password: "admin123", role: "admin", desc: "Akses Penuh Semua Modul", color: "#52a659" },
@@ -48,18 +49,8 @@ export default function Login() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-logo-wrap">
-          <div style={{
-            width: 64,
-            height: 64,
-            borderRadius: 18,
-            background: "linear-gradient(135deg, #2d6833 0%, #14b8b3 100%)",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: 14,
-            boxShadow: "0 8px 24px rgba(20, 184, 179, 0.35)"
-          }}>
-            <Flame size={36} color="#ffffff" />
+          <div style={{ marginBottom: 14, display: "inline-block" }}>
+            <JanegasLogo size={68} style={{ boxShadow: "0 8px 24px rgba(45, 106, 79, 0.35)" }} />
           </div>
           <h1 className="login-title">JANEGAS</h1>
           <p className="login-subtitle">
